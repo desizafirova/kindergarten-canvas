@@ -1,0 +1,96 @@
+import { Button } from "@/components/ui/button";
+import { Sparkles, Heart, BookOpen } from "lucide-react";
+import heroImage from "@/assets/hero-illustration.jpg";
+
+const Hero = () => {
+  return (
+    <section id="home" className="relative min-h-screen pt-20 overflow-hidden">
+      {/* Decorative Blobs */}
+      <div className="absolute top-32 left-10 w-32 h-32 bg-primary/30 rounded-blob animate-blob" />
+      <div className="absolute top-48 right-20 w-24 h-24 bg-secondary/30 rounded-blob animate-blob" style={{ animationDelay: "2s" }} />
+      <div className="absolute bottom-32 left-1/4 w-20 h-20 bg-accent/30 rounded-blob animate-blob" style={{ animationDelay: "4s" }} />
+      <div className="absolute bottom-48 right-1/3 w-16 h-16 bg-mint/30 rounded-blob animate-blob" style={{ animationDelay: "6s" }} />
+
+      <div className="container mx-auto px-4 py-16 lg:py-24">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Text Content */}
+          <div className="text-center lg:text-left space-y-6 animate-fade-in">
+            <div className="inline-flex items-center gap-2 bg-primary/20 text-foreground px-4 py-2 rounded-full font-body font-medium">
+              <Sparkles className="w-4 h-4 text-primary" />
+              Welcome to Little Stars!
+            </div>
+            
+            <h1 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight">
+              Where Every Child{" "}
+              <span className="text-accent">Shines</span>{" "}
+              <span className="text-secondary">Bright</span>
+            </h1>
+            
+            <p className="font-body text-lg md:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
+              A nurturing kindergarten where creativity, curiosity, and joy come together. 
+              We help little ones discover their unique sparkle through play-based learning.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <Button variant="playful" size="xl">
+                <Heart className="w-5 h-5 mr-2" />
+                Schedule a Visit
+              </Button>
+              <Button variant="outline" size="xl" className="border-2 border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground">
+                <BookOpen className="w-5 h-5 mr-2" />
+                Our Programs
+              </Button>
+            </div>
+
+            {/* Stats */}
+            <div className="flex flex-wrap gap-8 justify-center lg:justify-start pt-6">
+              {[
+                { number: "15+", label: "Years Experience" },
+                { number: "200+", label: "Happy Kids" },
+                { number: "20+", label: "Expert Teachers" },
+              ].map((stat, i) => (
+                <div key={i} className="text-center">
+                  <div className="font-display font-bold text-3xl text-accent">{stat.number}</div>
+                  <div className="font-body text-sm text-muted-foreground">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Hero Image */}
+          <div className="relative animate-float">
+            <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border-4 border-card">
+              <img
+                src={heroImage}
+                alt="Happy children playing and learning at Little Stars Kindergarten"
+                className="w-full h-auto object-cover"
+              />
+            </div>
+            {/* Decorative elements around image */}
+            <div className="absolute -top-4 -right-4 w-16 h-16 bg-primary rounded-full animate-bounce-slow flex items-center justify-center">
+              <span className="text-2xl">⭐</span>
+            </div>
+            <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-mint rounded-full animate-bounce-slow flex items-center justify-center" style={{ animationDelay: "1s" }}>
+              <span className="text-xl">🎨</span>
+            </div>
+            <div className="absolute top-1/2 -right-6 w-10 h-10 bg-accent rounded-full animate-bounce-slow flex items-center justify-center" style={{ animationDelay: "2s" }}>
+              <span className="text-lg">📚</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Wave Divider */}
+      <div className="absolute bottom-0 left-0 right-0">
+        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
+          <path
+            d="M0 120L48 110C96 100 192 80 288 70C384 60 480 60 576 65C672 70 768 80 864 85C960 90 1056 90 1152 85C1248 80 1344 70 1392 65L1440 60V120H1392C1344 120 1248 120 1152 120C1056 120 960 120 864 120C768 120 672 120 576 120C480 120 384 120 288 120C192 120 96 120 48 120H0Z"
+            fill="hsl(var(--card))"
+          />
+        </svg>
+      </div>
+    </section>
+  );
+};
+
+export default Hero;
