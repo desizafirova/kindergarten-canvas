@@ -1,4 +1,7 @@
+import { motion } from "framer-motion";
 import { Shield, Heart, Lightbulb, Award } from "lucide-react";
+import ScrollReveal from "./animations/ScrollReveal";
+import StaggerChildren, { itemVariants } from "./animations/StaggerChildren";
 
 const values = [
   {
@@ -43,7 +46,7 @@ const About = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
-          <div className="space-y-6 animate-fade-in">
+          <ScrollReveal direction="left" className="space-y-6">
             <span className="inline-block font-body font-medium text-mint bg-mint/20 px-4 py-1 rounded-full">
               About Us
             </span>
@@ -68,34 +71,45 @@ const About = () => {
                 "Modern learning facilities and resources",
                 "Regular parent communication and involvement",
               ].map((item, i) => (
-                <li key={i} className="flex items-center gap-3 font-body text-foreground">
+                <motion.li
+                  key={i}
+                  className="flex items-center gap-3 font-body text-foreground"
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
+                >
                   <span className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-sm">✓</span>
                   {item}
-                </li>
+                </motion.li>
               ))}
             </ul>
-          </div>
+          </ScrollReveal>
 
           {/* Right - Values Grid */}
-          <div className="grid grid-cols-2 gap-4 lg:gap-6">
-            {values.map((value, index) => (
-              <div
+          <StaggerChildren className="grid grid-cols-2 gap-4 lg:gap-6" staggerDelay={0.15}>
+            {values.map((value) => (
+              <motion.div
                 key={value.title}
-                className={`${value.bg} rounded-3xl p-6 text-center hover:scale-105 transition-transform duration-300`}
-                style={{ animationDelay: `${index * 150}ms` }}
+                variants={itemVariants}
+                whileHover={{ scale: 1.05 }}
+                className={`${value.bg} rounded-3xl p-6 text-center cursor-default`}
               >
-                <div className={`w-14 h-14 ${value.bg} rounded-2xl flex items-center justify-center mx-auto mb-4`}>
+                <motion.div
+                  className={`w-14 h-14 ${value.bg} rounded-2xl flex items-center justify-center mx-auto mb-4`}
+                  whileHover={{ rotate: 360, transition: { duration: 0.6 } }}
+                >
                   <value.icon className={`w-7 h-7 ${value.color}`} />
-                </div>
+                </motion.div>
                 <h3 className="font-display font-bold text-lg text-foreground mb-2">
                   {value.title}
                 </h3>
                 <p className="font-body text-sm text-muted-foreground">
                   {value.description}
                 </p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </StaggerChildren>
         </div>
       </div>
     </section>
