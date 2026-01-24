@@ -1,4 +1,7 @@
+import { motion, type Variants } from "framer-motion";
 import { Palette, Music, Calculator, TreePine, Users, Puzzle } from "lucide-react";
+import ScrollReveal from "./animations/ScrollReveal";
+import StaggerChildren, { itemVariants } from "./animations/StaggerChildren";
 
 const programs = [
   {
@@ -49,12 +52,32 @@ const Programs = () => {
   return (
     <section id="programs" className="py-20 bg-card relative">
       {/* Decorative elements */}
-      <div className="absolute top-10 right-10 w-20 h-20 bg-primary/20 rounded-blob animate-blob" />
-      <div className="absolute bottom-10 left-10 w-16 h-16 bg-secondary/20 rounded-blob animate-blob" style={{ animationDelay: "3s" }} />
+      <motion.div
+        className="absolute top-10 right-10 w-20 h-20 bg-primary/20"
+        animate={{
+          borderRadius: [
+            "60% 40% 30% 70% / 60% 30% 70% 40%",
+            "30% 60% 70% 40% / 50% 60% 30% 60%",
+            "60% 40% 30% 70% / 60% 30% 70% 40%",
+          ],
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute bottom-10 left-10 w-16 h-16 bg-secondary/20"
+        animate={{
+          borderRadius: [
+            "30% 60% 70% 40% / 50% 60% 30% 60%",
+            "60% 40% 30% 70% / 60% 30% 70% 40%",
+            "30% 60% 70% 40% / 50% 60% 30% 60%",
+          ],
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 3 }}
+      />
 
       <div className="container mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center mb-16 animate-fade-in">
+        <ScrollReveal className="text-center mb-16">
           <span className="inline-block font-body font-medium text-secondary bg-secondary/20 px-4 py-1 rounded-full mb-4">
             Our Programs
           </span>
@@ -65,28 +88,32 @@ const Programs = () => {
             Our carefully designed programs nurture every aspect of your child's development 
             through engaging, age-appropriate activities.
           </p>
-        </div>
+        </ScrollReveal>
 
         {/* Programs Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {programs.map((program, index) => (
-            <div
+        <StaggerChildren className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" staggerDelay={0.1}>
+          {programs.map((program) => (
+            <motion.div
               key={program.title}
-              className="group bg-background rounded-3xl p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-2 border-transparent hover:border-primary/30"
-              style={{ animationDelay: `${index * 100}ms` }}
+              variants={itemVariants}
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="group bg-background rounded-3xl p-6 lg:p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-transparent hover:border-primary/30"
             >
-              <div className={`w-16 h-16 ${program.color} rounded-2xl flex items-center justify-center mb-6 group-hover:animate-wiggle transition-transform`}>
+              <motion.div
+                className={`w-16 h-16 ${program.color} rounded-2xl flex items-center justify-center mb-6`}
+                whileHover={{ rotate: [0, -10, 10, -10, 0], transition: { duration: 0.5 } }}
+              >
                 <program.icon className={`w-8 h-8 ${program.iconColor}`} />
-              </div>
+              </motion.div>
               <h3 className="font-display font-bold text-xl text-foreground mb-3">
                 {program.title}
               </h3>
               <p className="font-body text-muted-foreground leading-relaxed">
                 {program.description}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </StaggerChildren>
       </div>
     </section>
   );

@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Star, Facebook, Instagram, Youtube, Twitter } from "lucide-react";
 
 const Footer = () => {
@@ -6,11 +7,21 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
-          <div className="md:col-span-2">
-            <a href="#home" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+          <motion.div
+            className="md:col-span-2"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <a href="#home" className="flex items-center gap-2 mb-4 group">
+              <motion.div
+                className="w-10 h-10 bg-primary rounded-full flex items-center justify-center"
+                whileHover={{ rotate: 360, scale: 1.1 }}
+                transition={{ duration: 0.5 }}
+              >
                 <Star className="w-5 h-5 text-primary-foreground fill-primary-foreground" />
-              </div>
+              </motion.div>
               <span className="font-display font-bold text-xl text-background">
                 Little Stars
               </span>
@@ -21,54 +32,92 @@ const Footer = () => {
             </p>
             <div className="flex gap-3">
               {[Facebook, Instagram, Youtube, Twitter].map((Icon, i) => (
-                <a
+                <motion.a
                   key={i}
                   href="#"
                   className="w-10 h-10 bg-background/10 hover:bg-primary rounded-full flex items-center justify-center transition-colors"
+                  whileHover={{ scale: 1.15, y: -3 }}
+                  whileTap={{ scale: 0.95 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
                 >
                   <Icon className="w-5 h-5" />
-                </a>
+                </motion.a>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Quick Links */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1, duration: 0.5 }}
+          >
             <h4 className="font-display font-bold text-lg mb-4">Quick Links</h4>
             <ul className="space-y-2 font-body">
-              {["Home", "Programs", "About Us", "Testimonials", "Contact"].map((link) => (
-                <li key={link}>
+              {["Home", "Programs", "About Us", "Testimonials", "Contact"].map((link, i) => (
+                <motion.li
+                  key={link}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 + i * 0.05, duration: 0.3 }}
+                >
                   <a
                     href={`#${link.toLowerCase().replace(" ", "")}`}
-                    className="text-background/70 hover:text-primary transition-colors"
+                    className="text-background/70 hover:text-primary transition-colors inline-block"
                   >
-                    {link}
+                    <motion.span whileHover={{ x: 5 }} className="inline-block">
+                      {link}
+                    </motion.span>
                   </a>
-                </li>
+                </motion.li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Programs */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
             <h4 className="font-display font-bold text-lg mb-4">Our Programs</h4>
             <ul className="space-y-2 font-body">
-              {["Arts & Crafts", "Music & Movement", "Early Math", "Nature Discovery", "Social Skills"].map((program) => (
-                <li key={program}>
+              {["Arts & Crafts", "Music & Movement", "Early Math", "Nature Discovery", "Social Skills"].map((program, i) => (
+                <motion.li
+                  key={program}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 + i * 0.05, duration: 0.3 }}
+                >
                   <a
                     href="#programs"
-                    className="text-background/70 hover:text-primary transition-colors"
+                    className="text-background/70 hover:text-primary transition-colors inline-block"
                   >
-                    {program}
+                    <motion.span whileHover={{ x: 5 }} className="inline-block">
+                      {program}
+                    </motion.span>
                   </a>
-                </li>
+                </motion.li>
               ))}
             </ul>
-          </div>
+          </motion.div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-background/20 flex flex-col md:flex-row justify-between items-center gap-4">
+        <motion.div
+          className="pt-8 border-t border-background/20 flex flex-col md:flex-row justify-between items-center gap-4"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+        >
           <p className="font-body text-sm text-background/60">
             © 2024 Little Stars Kindergarten. All rights reserved.
           </p>
@@ -76,7 +125,7 @@ const Footer = () => {
             <a href="#" className="hover:text-background transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-background transition-colors">Terms of Service</a>
           </div>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );
