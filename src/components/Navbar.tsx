@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Menu, Star } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -10,6 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import logo from "@/assets/logo.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,10 +53,8 @@ const Navbar = () => {
             <SheetContent side="left" className="w-80">
               <SheetHeader>
                 <SheetTitle className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                    <Star className="w-4 h-4 text-primary-foreground fill-primary-foreground" />
-                  </div>
-                  <span className="font-display font-bold">Little Stars</span>
+                  <img src={logo} alt="ДГ №48 Ран Босилек" className="w-10 h-10 object-contain" />
+                  <span className="font-display font-bold">ДГ №48 "Ран Босилек"</span>
                 </SheetTitle>
               </SheetHeader>
               <nav className="flex flex-col gap-1 mt-6">
@@ -107,18 +106,13 @@ const Navbar = () => {
           <Link to="/" className="absolute left-1/2 -translate-x-1/2">
             <motion.div
               className="flex items-center gap-2 group"
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.05 }}
             >
-              <motion.div
-                className="w-12 h-12 bg-primary rounded-full flex items-center justify-center"
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 0.5 }}
-              >
-                <Star className="w-6 h-6 text-primary-foreground fill-primary-foreground" />
-              </motion.div>
-              <span className="font-display font-bold text-xl text-foreground hidden sm:block">
-                Little Stars
-              </span>
+              <img 
+                src={logo} 
+                alt="ДГ №48 Ран Босилек" 
+                className="h-14 w-14 object-contain"
+              />
             </motion.div>
           </Link>
 
