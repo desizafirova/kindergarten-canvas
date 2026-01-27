@@ -6,7 +6,7 @@ import ScrollReveal from "@/components/animations/ScrollReveal";
 import StaggerChildren, { itemVariants } from "@/components/animations/StaggerChildren";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import JobApplicationForm from "@/components/careers/JobApplicationForm";
 const openPositions = [
   {
     title: "Lead Preschool Teacher",
@@ -230,36 +230,18 @@ const Careers = () => {
           </div>
         </section>
 
-        {/* Application CTA */}
-        <section className="py-20">
+        {/* Application Form */}
+        <section id="apply" className="py-20">
           <div className="container mx-auto px-4">
-            <ScrollReveal>
-              <div className="max-w-3xl mx-auto bg-gradient-to-r from-primary to-accent rounded-3xl p-8 md:p-12 text-center relative overflow-hidden">
-                <motion.div
-                  className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 4, repeat: Infinity }}
-                />
-                <motion.div
-                  className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"
-                  animate={{ scale: [1.2, 1, 1.2] }}
-                  transition={{ duration: 4, repeat: Infinity }}
-                />
-                <h2 className="font-display font-bold text-2xl md:text-3xl text-white mb-4 relative z-10">
-                  Don't See Your Perfect Role?
-                </h2>
-                <p className="text-white/90 mb-6 relative z-10">
-                  We're always looking for passionate individuals. Send us your resume and we'll keep you in mind for future opportunities.
-                </p>
-                <Button
-                  variant="secondary"
-                  size="lg"
-                  className="relative z-10 bg-white text-primary hover:bg-white/90"
-                >
-                  Submit General Application
-                </Button>
-              </div>
+            <ScrollReveal className="text-center mb-12">
+              <h2 className="font-display font-bold text-3xl md:text-4xl text-foreground mb-4">
+                Apply <span className="text-primary">Now</span>
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Ready to make a difference? Fill out the application form below and join our team of dedicated educators.
+              </p>
             </ScrollReveal>
+            <JobApplicationForm />
           </div>
         </section>
       </main>
