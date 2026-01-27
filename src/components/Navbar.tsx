@@ -1,8 +1,15 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Star } from "lucide-react";
+import { motion } from "framer-motion";
+import { Menu, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,120 +38,27 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <Link to="/">
-            <motion.div
-              className="flex items-center gap-2 group"
-              whileHover={{ scale: 1.02 }}
-            >
-              <motion.div
-                className="w-12 h-12 bg-primary rounded-full flex items-center justify-center"
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 0.5 }}
+          {/* Hamburger Menu - Left */}
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <motion.button
+                className="p-2 text-foreground hover:bg-muted rounded-lg transition-colors"
+                whileTap={{ scale: 0.95 }}
+                aria-label="Open menu"
               >
-                <Star className="w-6 h-6 text-primary-foreground fill-primary-foreground" />
-              </motion.div>
-              <span className="font-display font-bold text-xl text-foreground">
-                Little Stars
-              </span>
-            </motion.div>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link, i) =>
-              link.isRoute ? (
-                <motion.div
-                  key={link.name}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
-                  whileHover={{ y: -2 }}
-                >
-                  <Link
-                    to={link.href}
-                    className="font-body font-medium text-foreground/80 hover:text-accent transition-colors relative group"
-                  >
-                    {link.name}
-                  </Link>
-                </motion.div>
-              ) : (
-                <motion.a
-                  key={link.name}
-                  href={link.href}
-                  className="font-body font-medium text-foreground/80 hover:text-accent transition-colors relative group"
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
-                  whileHover={{ y: -2 }}
-                >
-                  {link.name}
-                  <motion.span
-                    className="absolute -bottom-1 left-0 h-0.5 bg-accent rounded-full"
-                    initial={{ width: 0 }}
-                    whileHover={{ width: "100%" }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </motion.a>
-              )
-            )}
-          </div>
-
-          {/* CTA Button */}
-          <motion.div
-            className="hidden md:block"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.4, duration: 0.4 }}
-          >
-            <Button variant="playful" size="lg">
-              Enroll Now
-            </Button>
-          </motion.div>
-
-          {/* Mobile Menu Toggle */}
-          <motion.button
-            className="md:hidden p-2 text-foreground"
-            onClick={() => setIsOpen(!isOpen)}
-            whileTap={{ scale: 0.95 }}
-          >
-            <AnimatePresence mode="wait">
-              {isOpen ? (
-                <motion.div
-                  key="close"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <X className="w-6 h-6" />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="menu"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Menu className="w-6 h-6" />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.button>
-        </div>
-
-        {/* Mobile Navigation */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              className="md:hidden py-4 border-t border-border overflow-hidden"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-            >
-              <div className="flex flex-col gap-2">
+                <Menu className="w-6 h-6" />
+              </motion.button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-80">
+              <SheetHeader>
+                <SheetTitle className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                    <Star className="w-4 h-4 text-primary-foreground fill-primary-foreground" />
+                  </div>
+                  <span className="font-display font-bold">Little Stars</span>
+                </SheetTitle>
+              </SheetHeader>
+              <nav className="flex flex-col gap-1 mt-6">
                 {navLinks.map((link, i) =>
                   link.isRoute ? (
                     <motion.div
@@ -155,7 +69,7 @@ const Navbar = () => {
                     >
                       <Link
                         to={link.href}
-                        className="block font-body font-medium text-foreground/80 hover:text-accent transition-colors px-2 py-3 rounded-lg hover:bg-muted"
+                        className="block font-body font-medium text-foreground/80 hover:text-accent hover:bg-muted transition-colors px-3 py-3 rounded-lg"
                         onClick={() => setIsOpen(false)}
                       >
                         {link.name}
@@ -165,7 +79,7 @@ const Navbar = () => {
                     <motion.a
                       key={link.name}
                       href={link.href}
-                      className="font-body font-medium text-foreground/80 hover:text-accent transition-colors px-2 py-3 rounded-lg hover:bg-muted"
+                      className="block font-body font-medium text-foreground/80 hover:text-accent hover:bg-muted transition-colors px-3 py-3 rounded-lg"
                       onClick={() => setIsOpen(false)}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -178,17 +92,47 @@ const Navbar = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.25, duration: 0.3 }}
-                  className="mt-2"
+                  transition={{ delay: 0.5, duration: 0.3 }}
+                  className="mt-4 px-3"
                 >
                   <Button variant="playful" size="lg" className="w-full">
                     Enroll Now
                   </Button>
                 </motion.div>
-              </div>
+              </nav>
+            </SheetContent>
+          </Sheet>
+
+          {/* Logo - Center */}
+          <Link to="/" className="absolute left-1/2 -translate-x-1/2">
+            <motion.div
+              className="flex items-center gap-2 group"
+              whileHover={{ scale: 1.02 }}
+            >
+              <motion.div
+                className="w-12 h-12 bg-primary rounded-full flex items-center justify-center"
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Star className="w-6 h-6 text-primary-foreground fill-primary-foreground" />
+              </motion.div>
+              <span className="font-display font-bold text-xl text-foreground hidden sm:block">
+                Little Stars
+              </span>
             </motion.div>
-          )}
-        </AnimatePresence>
+          </Link>
+
+          {/* CTA Button - Right */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4, duration: 0.4 }}
+          >
+            <Button variant="playful" size="lg" className="hidden sm:flex">
+              Enroll Now
+            </Button>
+          </motion.div>
+        </div>
       </div>
     </motion.nav>
   );
