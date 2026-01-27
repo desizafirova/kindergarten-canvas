@@ -203,7 +203,11 @@ const Careers = () => {
                             </span>
                           </div>
                         </div>
-                        <Button variant="playful" size="sm">
+                        <Button
+                          variant="playful"
+                          size="sm"
+                          onClick={() => document.getElementById("apply")?.scrollIntoView({ behavior: "smooth" })}
+                        >
                           <Send className="w-4 h-4 mr-1" />
                           Apply Now
                         </Button>
