@@ -7,11 +7,22 @@ import StaggerChildren, { itemVariants } from "@/components/animations/StaggerCh
 
 const groups = [
   {
+    name: "Tiny Tots Nursery",
+    ageRange: "1-2 years",
+    capacity: "8 children",
+    schedule: "8:00 AM - 12:00 PM",
+    icon: Baby,
+    color: "bg-purple",
+    iconColor: "text-purple-foreground",
+    description: "Specialized care for our youngest with focus on sensory development, attachment, and gentle routines that nurture early growth.",
+    activities: ["Tummy time", "Sensory bins", "Lullabies & songs", "Soft play", "Feeding & diapering"],
+  },
+  {
     name: "Little Seedlings",
     ageRange: "2-3 years",
     capacity: "12 children",
     schedule: "8:00 AM - 1:00 PM",
-    icon: Baby,
+    icon: Heart,
     color: "bg-accent",
     iconColor: "text-accent-foreground",
     description: "Our youngest learners explore the world through sensory play, music, and gentle routines that build confidence and security.",

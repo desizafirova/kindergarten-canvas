@@ -14,6 +14,8 @@ const Navbar = () => {
     { name: "Programs", href: isHomePage ? "#programs" : "/#programs", isRoute: !isHomePage },
     { name: "Groups", href: "/groups", isRoute: true },
     { name: "Schedule", href: "/daily-schedule", isRoute: true },
+    { name: "Menu", href: "/menu", isRoute: true },
+    { name: "Documents", href: "/documents", isRoute: true },
     { name: "Admission", href: "/admission", isRoute: true },
     { name: "Careers", href: "/careers", isRoute: true },
     { name: "News", href: "/news", isRoute: true },

@@ -111,6 +111,95 @@ const About = () => {
             ))}
           </StaggerChildren>
         </div>
+
+        {/* Location & Community Section */}
+        <div className="mt-20 pt-16 border-t border-border">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <ScrollReveal direction="left" className="space-y-6">
+              <span className="inline-block font-body font-medium text-primary bg-primary/20 px-4 py-1 rounded-full">
+                Our Location
+              </span>
+              <h2 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-foreground">
+                At the Heart of the <span className="text-mint">Community</span>
+              </h2>
+              <p className="font-body text-lg text-muted-foreground leading-relaxed">
+                Nestled in a peaceful, family-friendly neighborhood, Little Stars Kindergarten 
+                offers the perfect environment for early learning. Our location provides easy 
+                access for families while maintaining a safe, nurturing atmosphere.
+              </p>
+              <p className="font-body text-lg text-muted-foreground leading-relaxed">
+                We're proud to be an active part of our local community, partnering with 
+                nearby schools, libraries, and organizations to enrich our children's experiences.
+              </p>
+            </ScrollReveal>
+
+            <StaggerChildren className="grid grid-cols-2 gap-4" staggerDelay={0.1}>
+              {[
+                {
+                  title: "City Park",
+                  description: "5-minute walk to the local park for nature activities",
+                  icon: "🌳",
+                  bg: "bg-mint/20",
+                },
+                {
+                  title: "Public Library",
+                  description: "Monthly visits for story time and book exploration",
+                  icon: "📚",
+                  bg: "bg-primary/20",
+                },
+                {
+                  title: "Public Transport",
+                  description: "Bus stops nearby for convenient parent access",
+                  icon: "🚌",
+                  bg: "bg-secondary/20",
+                },
+                {
+                  title: "Primary Schools",
+                  description: "Close to excellent schools for easy transition",
+                  icon: "🏫",
+                  bg: "bg-accent/20",
+                },
+              ].map((item) => (
+                <motion.div
+                  key={item.title}
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.05 }}
+                  className={`${item.bg} rounded-2xl p-5 cursor-default`}
+                >
+                  <span className="text-3xl mb-3 block">{item.icon}</span>
+                  <h3 className="font-display font-bold text-foreground mb-1">
+                    {item.title}
+                  </h3>
+                  <p className="font-body text-sm text-muted-foreground">
+                    {item.description}
+                  </p>
+                </motion.div>
+              ))}
+            </StaggerChildren>
+          </div>
+
+          {/* Address Card */}
+          <ScrollReveal className="mt-12">
+            <motion.div
+              className="bg-card rounded-3xl p-8 shadow-lg border border-border max-w-2xl mx-auto text-center"
+              whileHover={{ y: -5 }}
+            >
+              <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">📍</span>
+              </div>
+              <h3 className="font-display font-bold text-xl text-foreground mb-2">
+                Visit Us
+              </h3>
+              <p className="font-body text-muted-foreground mb-4">
+                123 Sunshine Avenue, Happy Valley<br />
+                Open Monday - Friday, 7:30 AM - 6:00 PM
+              </p>
+              <p className="font-body text-sm text-primary">
+                Schedule a tour today and see our wonderful facilities!
+              </p>
+            </motion.div>
+          </ScrollReveal>
+        </div>
       </div>
     </section>
   );
