@@ -1,33 +1,41 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Link, useLocation } from "react-router-dom";
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Menu } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Link, useLocation } from 'react-router-dom';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import logo from "@/assets/logo.png";
+} from '@/components/ui/sheet';
+import logo from '@/assets/logo-header.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const isHomePage = location.pathname === "/";
+  const isHomePage = location.pathname === '/';
 
   const navLinks = [
-    { name: "Home", href: isHomePage ? "#home" : "/", isRoute: !isHomePage },
-    { name: "Programs", href: isHomePage ? "#programs" : "/#programs", isRoute: !isHomePage },
-    { name: "Groups", href: "/groups", isRoute: true },
-    { name: "Schedule", href: "/daily-schedule", isRoute: true },
-    { name: "Menu", href: "/menu", isRoute: true },
-    { name: "Documents", href: "/documents", isRoute: true },
-    { name: "Admission", href: "/admission", isRoute: true },
-    { name: "Careers", href: "/careers", isRoute: true },
-    { name: "News", href: "/news", isRoute: true },
-    { name: "Contact", href: isHomePage ? "#contact" : "/#contact", isRoute: !isHomePage },
+    { name: 'Начало', href: isHomePage ? '#home' : '/', isRoute: !isHomePage },
+    {
+      name: 'Програми',
+      href: isHomePage ? '#programs' : '/#programs',
+      isRoute: !isHomePage,
+    },
+    { name: 'Групи', href: '/groups', isRoute: true },
+    { name: 'График', href: '/daily-schedule', isRoute: true },
+    { name: 'Меню', href: '/menu', isRoute: true },
+    { name: 'Документи', href: '/documents', isRoute: true },
+    { name: 'Прием', href: '/admission', isRoute: true },
+    { name: 'Кариери', href: '/careers', isRoute: true },
+    { name: 'Новини', href: '/news', isRoute: true },
+    {
+      name: 'Контакти',
+      href: isHomePage ? '#contact' : '/#contact',
+      isRoute: !isHomePage,
+    },
   ];
 
   return (
@@ -35,10 +43,10 @@ const Navbar = () => {
       className="fixed top-0 left-0 right-0 z-50 bg-card/90 backdrop-blur-md shadow-sm"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
     >
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-24">
           {/* Hamburger Menu - Left */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
@@ -52,9 +60,8 @@ const Navbar = () => {
             </SheetTrigger>
             <SheetContent side="left" className="w-80">
               <SheetHeader>
-                <SheetTitle className="flex items-center gap-2">
-                  <img src={logo} alt="ДГ №48 Ран Босилек" className="w-10 h-10 object-contain" />
-                  <span className="font-display font-bold">ДГ №48 "Ран Босилек"</span>
+                <SheetTitle className="flex items-center">
+                  <span className="font-display font-bold">Навигация</span>
                 </SheetTitle>
               </SheetHeader>
               <nav className="flex flex-col gap-1 mt-6">
@@ -86,7 +93,7 @@ const Navbar = () => {
                     >
                       {link.name}
                     </motion.a>
-                  )
+                  ),
                 )}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -105,13 +112,13 @@ const Navbar = () => {
           {/* Logo - Center */}
           <Link to="/" className="absolute left-1/2 -translate-x-1/2">
             <motion.div
-              className="flex items-center gap-2 group"
+              className="flex items-center justify-center gap-2 group"
               whileHover={{ scale: 1.05 }}
             >
-              <img 
-                src={logo} 
-                alt="ДГ №48 Ран Босилек" 
-                className="h-14 w-14 object-contain"
+              <img
+                src={logo}
+                alt="ДГ №48 Ран Босилек"
+                className="h-20 w-full"
               />
             </motion.div>
           </Link>
@@ -123,7 +130,7 @@ const Navbar = () => {
             transition={{ delay: 0.4, duration: 0.4 }}
           >
             <Button variant="playful" size="lg" className="hidden sm:flex">
-              Enroll Now
+              Кандидатстване
             </Button>
           </motion.div>
         </div>
