@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>kindergarten-canvas – UX Design Directions</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET & BASE ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #0F172A; color: #F1F5F9; min-height: 100vh; }
+
+/* ─── TOP NAV ─── */
+.top-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(15,23,42,0.85); backdrop-filter: blur(12px);
+  border-bottom: 1px solid #334155;
+  padding: 12px 24px; display: flex; align-items: center; gap: 24px;
+}
+.top-nav h1 { font-size: 18px; font-weight: 600; color: #3B82F6; white-space: nowrap; }
+.top-nav .subtitle { font-size: 13px; color: #64748B; margin-left: auto; }
+.direction-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.direction-tabs button {
+  background: #1E293B; border: 1px solid #334155; color: #94A3B8;
+  padding: 6px 14px; border-radius: 6px; font-size: 13px; font-family: inherit;
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.direction-tabs button:hover { border-color: #3B82F6; color: #fff; }
+.direction-tabs button.active { background: #3B82F6; border-color: #3B82F6; color: #fff; font-weight: 500; }
+
+/* ─── DIRECTION PANELS ─── */
+.direction { display: none; min-height: calc(100vh - 56px); margin-top: 56px; padding: 32px; }
+.direction.active { display: block; }
+.direction-header { max-width: 960px; margin: 0 auto 28px; }
+.direction-header h2 { font-size: 24px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+.direction-header p { font-size: 14px; color: #94A3B8; max-width: 640px; line-height: 1.5; }
+.direction-header .tags { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.direction-header .tag {
+  background: #1E293B; border: 1px solid #334155; color: #94A3B8;
+  padding: 3px 10px; border-radius: 20px; font-size: 12px;
+}
+
+/* ─── MOCKUP FRAME ─── */
+.mockup-frame {
+  max-width: 1100px; margin: 0 auto;
+  border-radius: 16px; overflow: hidden;
+  border: 1px solid #334155; box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  background: #fff; color: #1E293B;
+}
+.mockup-frame .browser-bar {
+  background: #E2E8F0; padding: 10px 16px; display: flex; align-items: center; gap: 8px;
+}
+.browser-bar .dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot.red { background: #EF4444; } .dot.yellow { background: #F59E0B; } .dot.green { background: #22C55E; }
+.browser-bar .url-bar {
+  flex: 1; background: #fff; border-radius: 4px; padding: 4px 10px;
+  font-size: 12px; color: #64748B; margin-left: 8px;
+}
+
+/* ─── SHARED BADGE STYLES ─── */
+.badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+.badge-published { background: #22C55E; color: #fff; }
+.badge-draft { background: #F59E0B; color: #fff; }
+
+/* ─── DIRECTION 1: Clean Card Dashboard ─── */
+.d1-layout { display: flex; min-height: 520px; }
+.d1-sidebar {
+  width: 240px; background: #fff; border-right: 1px solid #E2E8F0;
+  padding: 20px 0; flex-shrink: 0;
+}
+.d1-sidebar .logo { padding: 0 20px; margin-bottom: 24px; font-size: 18px; font-weight: 700; color: #3B82F6; }
+.d1-sidebar .nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 20px;
+  font-size: 14px; color: #64748B; cursor: pointer; transition: all 0.15s;
+}
+.d1-sidebar .nav-item:hover { background: #F8FAFC; color: #1E293B; }
+.d1-sidebar .nav-item.active { background: #EFF6FF; color: #3B82F6; font-weight: 500; }
+.d1-sidebar .nav-item .icon { width: 20px; text-align: center; }
+.d1-sidebar .nav-divider { height: 1px; background: #E2E8F0; margin: 12px 20px; }
+.d1-main { flex: 1; background: #F8FAFC; padding: 28px; }
+.d1-main .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.d1-main .page-header h2 { font-size: 22px; font-weight: 600; color: #1E293B; }
+.btn-primary {
+  background: #3B82F6; color: #fff; border: none; padding: 10px 20px;
+  border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit;
+}
+.btn-primary:hover { background: #2563EB; }
+.btn-secondary {
+  background: #E2E8F0; color: #1E293B; border: none; padding: 10px 20px;
+  border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit;
+}
+.card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.content-card {
+  background: #fff; border-radius: 12px; padding: 24px;
+  border: 1px solid #E2E8F0; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  transition: box-shadow 0.2s;
+}
+.content-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.content-card .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.content-card .card-icon { font-size: 24px; }
+.content-card .card-title { font-size: 16px; font-weight: 600; color: #1E293B; margin-bottom: 4px; }
+.content-card .card-meta { font-size: 13px; color: #64748B; }
+.content-card .card-stats { display: flex; gap: 12px; margin-top: 12px; }
+.content-card .stat { font-size: 12px; color: #64748B; }
+.content-card .stat strong { color: #1E293B; }
+.card-create-btn {
+  display: block; width: 100%; margin-top: 16px; padding: 8px;
+  background: #EFF6FF; border: 1px dashed #93C5FD; border-radius: 8px;
+  color: #3B82F6; font-size: 13px; font-weight: 500; cursor: pointer;
+  font-family: inherit; text-align: center;
+}
+.card-create-btn:hover { background: #DBEAFE; }
+
+/* ─── DIRECTION 2: Info-Rich with Recent Activity ─── */
+.d2-layout { display: flex; min-height: 520px; }
+.d2-sidebar { width: 240px; background: #1E293B; padding: 20px 0; flex-shrink: 0; }
+.d2-sidebar .logo { padding: 0 20px; margin-bottom: 24px; font-size: 18px; font-weight: 700; color: #fff; }
+.d2-sidebar .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 14px; color: #94A3B8; cursor: pointer; }
+.d2-sidebar .nav-item:hover { background: #334155; color: #fff; }
+.d2-sidebar .nav-item.active { background: #3B82F6; color: #fff; font-weight: 500; }
+.d2-sidebar .nav-item .icon { width: 20px; text-align: center; }
+.d2-sidebar .nav-divider { height: 1px; background: #334155; margin: 12px 20px; }
+.d2-main { flex: 1; background: #F8FAFC; padding: 28px; overflow: auto; }
+.d2-top { display: flex; gap: 16px; margin-bottom: 24px; }
+.d2-stat-card {
+  flex: 1; background: #fff; border-radius: 12px; padding: 20px;
+  border: 1px solid #E2E8F0;
+}
+.d2-stat-card .stat-value { font-size: 28px; font-weight: 700; color: #1E293B; }
+.d2-stat-card .stat-label { font-size: 13px; color: #64748B; margin-top: 2px; }
+.d2-stat-card .stat-badge { margin-top: 8px; }
+.d2-bottom { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
+.d2-recent {
+  background: #fff; border-radius: 12px; padding: 20px; border: 1px solid #E2E8F0;
+}
+.d2-recent h3 { font-size: 15px; font-weight: 600; margin-bottom: 16px; }
+.d2-recent-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #F1F5F9; }
+.d2-recent-item:last-child { border-bottom: none; }
+.d2-recent-item .item-icon { width: 36px; height: 36px; border-radius: 8px; background: #EFF6FF; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.d2-recent-item .item-title { font-size: 14px; font-weight: 500; color: #1E293B; }
+.d2-recent-item .item-meta { font-size: 12px; color: #94A3B8; }
+.d2-recent-item .badge { margin-left: auto; }
+.d2-quick { background: #fff; border-radius: 12px; padding: 20px; border: 1px solid #E2E8F0; }
+.d2-quick h3 { font-size: 15px; font-weight: 600; margin-bottom: 16px; }
+.d2-quick-btn {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px 14px;
+  border-radius: 8px; border: 1px solid #E2E8F0; background: #fff;
+  cursor: pointer; font-family: inherit; margin-bottom: 8px; transition: all 0.15s;
+}
+.d2-quick-btn:hover { border-color: #3B82F6; background: #EFF6FF; }
+.d2-quick-btn .q-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.d2-quick-btn .q-label { font-size: 14px; font-weight: 500; color: #1E293B; text-align: left; }
+.d2-quick-btn .q-sub { font-size: 12px; color: #64748B; text-align: left; }
+
+/* ─── DIRECTION 3: Create Form Focus ─── */
+.d3-layout { display: flex; min-height: 560px; }
+.d3-sidebar { width: 60px; background: #1E293B; padding: 16px 0; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.d3-sidebar .logo-icon { width: 36px; height: 36px; background: #3B82F6; border-radius: 10px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; font-weight: 700; }
+.d3-nav-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #64748B; cursor: pointer; font-size: 18px; }
+.d3-nav-icon:hover { background: #334155; color: #fff; }
+.d3-nav-icon.active { background: #3B82F6; color: #fff; }
+.d3-main { flex: 1; background: #F8FAFC; padding: 28px; }
+.d3-main .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.d3-form-container { background: #fff; border-radius: 12px; border: 1px solid #E2E8F0; padding: 28px; max-width: 700px; }
+.d3-form-container .form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.d3-form-container .form-header h3 { font-size: 18px; font-weight: 600; }
+.d3-form-container .save-status { font-size: 12px; color: #22C55E; display: flex; align-items: center; gap: 4px; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-size: 14px; font-weight: 500; color: #1E293B; margin-bottom: 6px; }
+.form-input {
+  width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid #E2E8F0;
+  font-size: 15px; font-family: inherit; color: #1E293B; background: #fff;
+  outline: none; transition: border-color 0.15s;
+}
+.form-input:focus { border-color: #3B82F6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+.form-input::placeholder { color: #94A3B8; }
+.editor-area {
+  width: 100%; min-height: 140px; padding: 14px; border-radius: 8px; border: 1px solid #E2E8F0;
+  font-size: 15px; font-family: inherit; color: #1E293B; resize: vertical;
+  outline: none;
+}
+.editor-toolbar {
+  display: flex; gap: 4px; padding: 8px; background: #F8FAFC;
+  border-radius: 8px 8px 0 0; border: 1px solid #E2E8F0; border-bottom: none;
+}
+.toolbar-btn { width: 32px; height: 32px; border-radius: 6px; border: none; background: transparent; color: #64748B; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+.toolbar-btn:hover { background: #E2E8F0; color: #1E293B; }
+.upload-zone {
+  border: 2px dashed #E2E8F0; border-radius: 8px; padding: 24px; text-align: center;
+  color: #94A3B8; font-size: 14px; cursor: pointer;
+}
+.upload-zone:hover { border-color: #3B82F6; color: #3B82F6; background: #EFF6FF; }
+.form-actions { display: flex; gap: 12px; justify-content: flex-end; padding-top: 8px; }
+.btn-ghost { background: none; border: none; color: #64748B; font-size: 14px; cursor: pointer; padding: 10px 16px; font-family: inherit; }
+.btn-ghost:hover { color: #1E293B; }
+
+/* ─── DIRECTION 4: List View Dashboard ─── */
+.d4-layout { display: flex; min-height: 520px; }
+.d4-sidebar { width: 240px; background: #fff; border-right: 1px solid #E2E8F0; padding: 20px 0; flex-shrink: 0; }
+.d4-sidebar .logo { padding: 0 20px; margin-bottom: 24px; font-size: 18px; font-weight: 700; color: #3B82F6; }
+.d4-sidebar .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 14px; color: #64748B; cursor: pointer; }
+.d4-sidebar .nav-item:hover { background: #F8FAFC; color: #1E293B; }
+.d4-sidebar .nav-item.active { background: #EFF6FF; color: #3B82F6; font-weight: 500; }
+.d4-sidebar .nav-item .icon { width: 20px; text-align: center; }
+.d4-sidebar .nav-divider { height: 1px; background: #E2E8F0; margin: 12px 20px; }
+.d4-main { flex: 1; background: #F8FAFC; padding: 28px; }
+.d4-main .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.d4-filter-bar { display: flex; gap: 8px; margin-bottom: 20px; }
+.filter-chip {
+  padding: 6px 14px; border-radius: 20px; border: 1px solid #E2E8F0; background: #fff;
+  font-size: 13px; color: #64748B; cursor: pointer; font-family: inherit;
+}
+.filter-chip:hover { border-color: #3B82F6; color: #3B82F6; }
+.filter-chip.active { background: #EFF6FF; border-color: #3B82F6; color: #3B82F6; font-weight: 500; }
+.list-container { background: #fff; border-radius: 12px; border: 1px solid #E2E8F0; overflow: hidden; }
+.list-header { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; padding: 12px 20px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; }
+.list-header span { font-size: 12px; font-weight: 600; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; }
+.list-item { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; padding: 14px 20px; border-bottom: 1px solid #F1F5F9; align-items: center; }
+.list-item:last-child { border-bottom: none; }
+.list-item:hover { background: #FAFBFC; }
+.list-item .item-name { display: flex; align-items: center; gap: 10px; }
+.list-item .item-name .type-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.list-item .item-name .name-text { font-size: 14px; font-weight: 500; color: #1E293B; }
+.list-item .item-date { font-size: 13px; color: #64748B; }
+
+/* ─── DIRECTION 5: Dark Mode Dashboard ─── */
+.d5-layout { display: flex; min-height: 520px; background: #0F172A; }
+.d5-sidebar { width: 240px; background: #0F172A; border-right: 1px solid #1E293B; padding: 20px 0; flex-shrink: 0; }
+.d5-sidebar .logo { padding: 0 20px; margin-bottom: 24px; font-size: 18px; font-weight: 700; color: #3B82F6; }
+.d5-sidebar .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 14px; color: #64748B; cursor: pointer; }
+.d5-sidebar .nav-item:hover { background: #1E293B; color: #E2E8F0; }
+.d5-sidebar .nav-item.active { background: #1E3A5F; color: #60A5FA; font-weight: 500; }
+.d5-sidebar .nav-item .icon { width: 20px; text-align: center; }
+.d5-sidebar .nav-divider { height: 1px; background: #1E293B; margin: 12px 20px; }
+.d5-main { flex: 1; background: #0F172A; padding: 28px; }
+.d5-main .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.d5-main .page-header h2 { font-size: 22px; font-weight: 600; color: #F1F5F9; }
+.d5-btn-primary { background: #3B82F6; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; }
+.d5-card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.d5-card {
+  background: #1E293B; border-radius: 12px; padding: 24px;
+  border: 1px solid #334155;
+}
+.d5-card .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.d5-card .card-icon { font-size: 24px; }
+.d5-card .card-title { font-size: 16px; font-weight: 600; color: #F1F5F9; margin-bottom: 4px; }
+.d5-card .card-meta { font-size: 13px; color: #64748B; }
+.d5-card .card-stats { display: flex; gap: 12px; margin-top: 12px; }
+.d5-card .stat { font-size: 12px; color: #64748B; }
+.d5-card .stat strong { color: #E2E8F0; }
+.d5-card .card-create-btn {
+  display: block; width: 100%; margin-top: 16px; padding: 8px;
+  background: #1a3350; border: 1px dashed #3B82F6; border-radius: 8px;
+  color: #60A5FA; font-size: 13px; font-weight: 500; cursor: pointer;
+  font-family: inherit; text-align: center;
+}
+.d5-card .card-create-btn:hover { background: #1E3A5F; }
+
+/* ─── DIRECTION 6: Compact with Quick Actions ─── */
+.d6-layout { display: flex; min-height: 520px; }
+.d6-sidebar { width: 220px; background: #fff; border-right: 1px solid #E2E8F0; padding: 16px 0; flex-shrink: 0; }
+.d6-sidebar .logo { padding: 0 16px; margin-bottom: 20px; font-size: 17px; font-weight: 700; color: #3B82F6; }
+.d6-sidebar .nav-item { display: flex; align-items: center; gap: 8px; padding: 8px 16px; font-size: 14px; color: #64748B; cursor: pointer; border-radius: 0; }
+.d6-sidebar .nav-item:hover { background: #F8FAFC; color: #1E293B; }
+.d6-sidebar .nav-item.active { background: #EFF6FF; color: #3B82F6; font-weight: 500; }
+.d6-sidebar .nav-item .icon { width: 18px; text-align: center; }
+.d6-sidebar .nav-divider { height: 1px; background: #E2E8F0; margin: 8px 16px; }
+.d6-main { flex: 1; background: #F8FAFC; padding: 24px; }
+.d6-main .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.d6-main .page-header h2 { font-size: 20px; font-weight: 600; color: #1E293B; }
+.d6-quick-row { display: flex; gap: 10px; margin-bottom: 20px; }
+.d6-quick-action {
+  flex: 1; background: #fff; border: 1px solid #E2E8F0; border-radius: 10px;
+  padding: 14px; text-align: center; cursor: pointer; transition: all 0.15s;
+}
+.d6-quick-action:hover { border-color: #3B82F6; box-shadow: 0 2px 8px rgba(59,130,246,0.15); }
+.d6-quick-action .qa-icon { font-size: 22px; margin-bottom: 4px; }
+.d6-quick-action .qa-label { font-size: 13px; font-weight: 500; color: #1E293B; }
+.d6-content-sections { display: flex; flex-direction: column; gap: 12px; }
+.d6-section { background: #fff; border-radius: 10px; border: 1px solid #E2E8F0; overflow: hidden; }
+.d6-section-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #FAFBFC; border-bottom: 1px solid #F1F5F9; cursor: pointer; }
+.d6-section-header .sh-left { display: flex; align-items: center; gap: 8px; }
+.d6-section-header .sh-icon { font-size: 16px; }
+.d6-section-header .sh-title { font-size: 14px; font-weight: 600; color: #1E293B; }
+.d6-section-header .sh-count { font-size: 12px; color: #94A3B8; }
+.d6-section-header .sh-add { font-size: 18px; color: #3B82F6; cursor: pointer; }
+.d6-section-items { padding: 4px 0; }
+.d6-section-item { display: flex; align-items: center; gap: 10px; padding: 8px 16px; font-size: 14px; color: #1E293B; }
+.d6-section-item:hover { background: #F8FAFC; }
+.d6-section-item .si-title { flex: 1; font-weight: 400; }
+.d6-section-item .si-date { font-size: 12px; color: #94A3B8; }
+
+/* ─── EVALUATION HELPER ─── */
+.eval-panel {
+  max-width: 960px; margin: 28px auto 0;
+  background: rgba(30,41,59,0.6); border: 1px solid #334155;
+  border-radius: 12px; padding: 20px 24px;
+}
+.eval-panel h3 { font-size: 15px; font-weight: 600; color: #E2E8F0; margin-bottom: 12px; }
+.eval-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.eval-item { background: rgba(15,23,42,0.5); border-radius: 8px; padding: 12px; }
+.eval-item .ei-label { font-size: 12px; font-weight: 600; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.eval-item .ei-value { font-size: 13px; color: #CBD5E1; line-height: 1.4; }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <h1>kindergarten-canvas</h1>
+  <div class="direction-tabs">
+    <button class="active" onclick="show('d1')">1 – Clean Cards</button>
+    <button onclick="show('d2')">2 – Info-Rich</button>
+    <button onclick="show('d3')">3 – Form Focus</button>
+    <button onclick="show('d4')">4 – List View</button>
+    <button onclick="show('d5')">5 – Dark Mode</button>
+    <button onclick="show('d6')">6 – Compact</button>
+  </div>
+  <span class="subtitle">6 Design Directions</span>
+</nav>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- DIRECTION 1: Clean Card Dashboard              -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="d1" class="direction active">
+  <div class="direction-header">
+    <h2>Direction 1 – Clean Card Dashboard</h2>
+    <p>Light sidebar with white content cards on a soft gray background. Each content type is a prominent card with its own "Create" button. Airy, spacious, and confidence-building.</p>
+    <div class="tags">
+      <span class="tag">Light sidebar</span><span class="tag">Card grid</span>
+      <span class="tag">Create per card</span><span class="tag">Most spacious</span>
+    </div>
+  </div>
+  <div class="mockup-frame">
+    <div class="browser-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="url-bar">localhost:3000 – kindergarten-canvas admin</span></div>
+    <div class="d1-layout">
+      <aside class="d1-sidebar">
+        <div class="logo">kindergarten-canvas</div>
+        <div class="nav-item active"><span class="icon">🏠</span> Начало</div>
+        <div class="nav-item"><span class="icon">📰</span> Новини</div>
+        <div class="nav-item"><span class="icon">💼</span> Работни места</div>
+        <div class="nav-item"><span class="icon">📅</span> Срокове</div>
+        <div class="nav-item"><span class="icon">🎉</span>Angangna</div>
+        <div class="nav-item"><span class="icon">🖼️</span> Галерия</div>
+        <div class="nav-item"><span class="icon">👨‍🏫</span> Учители</div>
+        <div class="nav-divider"></div>
+        <div class="nav-item"><span class="icon">⚙️</span> Настройки</div>
+      </aside>
+      <main class="d1-main">
+        <div class="page-header">
+          <h2>Начало</h2>
+          <button class="btn-primary">+ Нова публикация</button>
+        </div>
+        <div class="card-grid">
+          <div class="content-card">
+            <div class="card-header"><span class="card-icon">📰</span><span class="badge badge-published">3 публикувани</span></div>
+            <div class="card-title">Новини</div>
+            <div class="card-meta">Последна актуализация: днес</div>
+            <div class="card-stats"><span class="stat"><strong>3</strong> активни</span><span class="stat"><strong>1</strong> чернокопия</span></div>
+            <button class="card-create-btn">+ Нова новина</button>
+          </div>
+          <div class="content-card">
+            <div class="card-header"><span class="card-icon">💼</span><span class="badge badge-draft">1 чернокопия</span></div>
+            <div class="card-title">Работни места</div>
+            <div class="card-meta">2 заявки за разглеждане</div>
+            <div class="card-stats"><span class="stat"><strong>2</strong> активни</span><span class="stat"><strong>1</strong> чернокопия</span></div>
+            <button class="card-create-btn">+ Ново работноarja</button>
+          </div>
+          <div class="content-card">
+            <div class="card-header"><span class="card-icon">⏰</span><span class="badge badge-published">2 публику.</span></div>
+            <div class="card-title">Срокове</div>
+            <div class="card-meta">Следващият срок: 15.02.2026</div>
+            <div class="card-stats"><span class="stat"><strong>2</strong> активни</span><span class="stat"><strong>0</strong> чернокопия</span></div>
+            <button class="card-create-btn">+ Нов срок</button>
+          </div>
+          <div class="content-card">
+            <div class="card-header"><span class="card-icon">🎉</span><span class="badge badge-published">1 публик.</span></div>
+            <div class="card-title">Angangna</div>
+            <div class="card-meta">Следващият: 20.02.2026</div>
+            <div class="card-stats"><span class="stat"><strong>1</strong> активна</span><span class="stat"><strong>2</strong> чернокопия</span></div>
+            <button class="card-create-btn">+ Новаangangna</button>
+          </div>
+          <div class="content-card">
+            <div class="card-header"><span class="card-icon">🖼️</span><span class="badge badge-published">5 альбома</span></div>
+            <div class="card-title">Галерия</div>
+            <div class="card-meta">Последни снимки: днес</div>
+            <div class="card-stats"><span class="stat"><strong>24</strong> снимки</span><span class="stat"><strong>5</strong> альбома</span></div>
+            <button class="card-create-btn">+ Нов альбум</button>
+          </div>
+          <div class="content-card">
+            <div class="card-header"><span class="card-icon">👨‍🏫</span><span class="badge badge-published">4 публик.</span></div>
+            <div class="card-title">Учители</div>
+            <div class="card-meta">4 профила активни</div>
+            <div class="card-stats"><span class="stat"><strong>4</strong> активни</span><span class="stat"><strong>1</strong> чернокопия</span></div>
+            <button class="card-create-btn">+ Нов учител</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <div class="eval-panel">
+    <h3>Direction 1 – Key Characteristics</h3>
+    <div class="eval-grid">
+      <div class="eval-item"><div class="ei-label">Layout</div><div class="ei-value">Light sidebar + card grid. Most spacious layout. Each card is self-contained.</div></div>
+      <div class="eval-item"><div class="ei-label">Primary Action</div><div class="ei-value">"Create" button on each card. Users don't need to navigate - create from dashboard directly.</div></div>
+      <div class="eval-item"><div class="ei-label">Status Visibility</div><div class="ei-value">Badges on every card show published/draft counts at a glance. Always visible.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- DIRECTION 2: Info-Rich with Recent Activity    -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="d2" class="direction">
+  <div class="direction-header">
+    <h2>Direction 2 – Info-Rich Dashboard</h2>
+    <p>Dark sidebar for strong visual separation. Dashboard shows summary stats at the top, recent activity feed, and quick-create action buttons. More information density while still airy.</p>
+    <div class="tags">
+      <span class="tag">Dark sidebar</span><span class="tag">Stats overview</span>
+      <span class="tag">Recent activity</span><span class="tag">Quick-create panel</span>
+    </div>
+  </div>
+  <div class="mockup-frame">
+    <div class="browser-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="url-bar">localhost:3000 – kindergarten-canvas admin</span></div>
+    <div class="d2-layout">
+      <aside class="d2-sidebar">
+        <div class="logo">kindergarten-canvas</div>
+        <div class="nav-item active"><span class="icon">🏠</span> Начало</div>
+        <div class="nav-item"><span class="icon">📰</span> Новини</div>
+        <div class="nav-item"><span class="icon">💼</span> Работни места</div>
+        <div class="nav-item"><span class="icon">📅</span> Срокове</div>
+        <div class="nav-item"><span class="icon">🎉</span> Gang</div>
+        <div class="nav-item"><span class="icon">🖼️</span> Галерия</div>
+        <div class="nav-item"><span class="icon">👨‍🏫</span> Учители</div>
+        <div class="nav-divider"></div>
+        <div class="nav-item"><span class="icon">⚙️</span> Настройки</div>
+      </aside>
+      <main class="d2-main">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <h2 style="font-size:22px;font-weight:600;color:#1E293B;">Начало</h2>
+          <button class="btn-primary">+ Нова публикация</button>
+        </div>
+        <div class="d2-top">
+          <div class="d2-stat-card"><div class="stat-value">12</div><div class="stat-label">Общо публикации</div><div class="stat-badge"><span class="badge badge-published">9 live</span> <span class="badge badge-draft">3 draft</span></div></div>
+          <div class="d2-stat-card"><div class="stat-value">2</div><div class="stat-label">Заявки за работа</div><div class="stat-badge"><span class="badge" style="background:#8B5CF6;color:#fff;">Нови</span></div></div>
+          <div class="d2-stat-card"><div class="stat-value">24</div><div class="stat-label">Снимки в галерия</div><div class="stat-badge"><span class="badge" style="background:#E2E8F0;color:#1E293B;">5 альбома</span></div></div>
+        </div>
+        <div class="d2-bottom">
+          <div class="d2-recent">
+            <h3>Последни дейности</h3>
+            <div class="d2-recent-item"><div class="item-icon">📰</div><div><div class="item-title">Нов новинен артикул</div><div class="item-meta">Днес, 10:30</div></div><span class="badge badge-published">Публикувани</span></div>
+            <div class="d2-recent-item"><div class="item-icon">🖼️</div><div><div class="item-title">Снимки от Масленица</div><div class="item-meta">Вчера, 15:20</div></div><span class="badge badge-published">Публикувани</span></div>
+            <div class="d2-recent-item"><div class="item-icon">💼</div><div><div class="item-title">Помощник-учител</div><div class="item-meta">Вчера, 09:00</div></div><span class="badge badge-draft">Чернокопия</span></div>
+            <div class="d2-recent-item"><div class="item-icon">⏰</div><div><div class="item-title">Срок за документи</div><div class="item-meta">31.01.2026</div></div><span class="badge badge-published">Публикувани</span></div>
+          </div>
+          <div class="d2-quick">
+            <h3>Бързо створяване</h3>
+            <div class="d2-quick-btn"><div class="q-icon" style="background:#EFF6FF;">📰</div><div><div class="q-label">Нова новина</div><div class="q-sub">Публикува незабавно</div></div></div>
+            <div class="d2-quick-btn"><div class="q-icon" style="background:#FEF3C7;">🖼️</div><div><div class="q-label">Нов альбум</div><div class="q-sub">Качвам снимки</div></div></div>
+            <div class="d2-quick-btn"><div class="q-icon" style="background:#EDE9FE;">💼</div><div><div class="q-label">Работно place</div><div class="q-sub">С заявки</div></div></div>
+            <div class="d2-quick-btn"><div class="q-icon" style="background:#ECFDF5;">⏰</div><div><div class="q-label">Нов срок</div><div class="q-sub">Задаваме дата</div></div></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <div class="eval-panel">
+    <h3>Direction 2 – Key Characteristics</h3>
+    <div class="eval-grid">
+      <div class="eval-item"><div class="ei-label">Layout</div><div class="ei-value">Dark sidebar creates focus. Stats bar gives instant overview. Two-column body: activity + quick actions.</div></div>
+      <div class="eval-item"><div class="ei-label">Primary Action</div><div class="ei-value">Quick-create panel on right. Each action shows what it does ("Publishes immediately"). Fastest path to content creation.</div></div>
+      <div class="eval-item"><div class="ei-label">Status Visibility</div><div class="ei-value">Top stats show live/draft counts at a glance. Activity feed shows each item's status inline.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- DIRECTION 3: News Creation Form Focus          -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="d3" class="direction">
+  <div class="direction-header">
+    <h2>Direction 3 – Form Focus (News Creation)</h2>
+    <p>Icon-only sidebar maximizes the content area. Shows the news creation form – the defining experience – in full detail. Single-screen, Facebook-style layout with TipTap toolbar, image upload zone, and action buttons.</p>
+    <div class="tags">
+      <span class="tag">Icon sidebar</span><span class="tag">Full-width form</span>
+      <span class="tag">Defining experience</span><span class="tag">Auto-save visible</span>
+    </div>
+  </div>
+  <div class="mockup-frame">
+    <div class="browser-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="url-bar">localhost:3000/news/create – kindergarten-canvas admin</span></div>
+    <div class="d3-layout">
+      <aside class="d3-sidebar">
+        <div class="logo-icon">K</div>
+        <div class="d3-nav-icon">🏠</div>
+        <div class="d3-nav-icon active">📰</div>
+        <div class="d3-nav-icon">💼</div>
+        <div class="d3-nav-icon">📅</div>
+        <div class="d3-nav-icon">🎉</div>
+        <div class="d3-nav-icon">🖼️</div>
+        <div class="d3-nav-icon">👨‍🏫</div>
+        <div style="flex:1;"></div>
+        <div class="d3-nav-icon">⚙️</div>
+      </aside>
+      <main class="d3-main">
+        <div class="page-header">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="color:#64748B;font-size:14px;cursor:pointer;">← Назад</span>
+            <h2 style="font-size:20px;font-weight:600;color:#1E293B;">Нова новина</h2>
+            <span class="badge badge-draft">Чернокопия</span>
+          </div>
+        </div>
+        <div class="d3-form-container">
+          <div class="form-header">
+            <h3>Новинен артикул</h3>
+            <div class="save-status">✓ Запазени</div>
+          </div>
+          <div class="form-group">
+            <label>Заглавка</label>
+            <input class="form-input" type="text" placeholder="Заведете заглавката на новини..." value="Масленица в детската градина">
+          </div>
+          <div class="form-group">
+            <label>Текст</label>
+            <div class="editor-toolbar">
+              <button class="toolbar-btn"><b>B</b></button>
+              <button class="toolbar-btn"><i>I</i></button>
+              <button class="toolbar-btn">U</button>
+              <button class="toolbar-btn">•≡</button>
+              <button class="toolbar-btn">1≡</button>
+              <button class="toolbar-btn">🔗</button>
+            </div>
+            <textarea class="editor-area" style="border-radius:0 0 8px 8px;">На 14.02.2026 в детската градина ще се проведат festivалите за Масленица. Всички деца са покани да участват в веселите игри и да опитат традicionните храни...</textarea>
+          </div>
+          <div class="form-group">
+            <label>Снимки</label>
+            <div class="upload-zone">📎 Плъзнете снимки тук или кликнете за качване</div>
+          </div>
+          <div class="form-group">
+            <label>Дата на публикация</label>
+            <input class="form-input" type="text" value="03.02.2026" style="max-width:180px;">
+          </div>
+          <div class="form-actions">
+            <button class="btn-ghost">Отмени</button>
+            <button class="btn-secondary">Запаза чернокопия</button>
+            <button class="btn-primary">Публикува</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <div class="eval-panel">
+    <h3>Direction 3 – Key Characteristics</h3>
+    <div class="eval-grid">
+      <div class="eval-item"><div class="ei-label">Layout</div><div class="ei-value">Icon-only sidebar gives maximum space to the form. Single-screen creation - everything visible at once, no scrolling needed for simple news.</div></div>
+      <div class="eval-item"><div class="ei-label">Primary Action</div><div class="ei-value">This IS the defining experience view. "Publish" button is prominent primary blue. "Save Draft" is clearly secondary.</div></div>
+      <div class="eval-item"><div class="ei-label">Status Visibility</div><div class="ei-value">"Draft" badge next to title. Auto-save "✓ Saved" indicator in top-right of form. Status always clear.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- DIRECTION 4: List View Dashboard               -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="d4" class="direction">
+  <div class="direction-header">
+    <h2>Direction 4 – List View Dashboard</h2>
+    <p>Content items displayed in a sortable, filterable list. Filter chips at top for content type and status. Clean table-like layout. Good for users who manage lots of content and need to find items quickly.</p>
+    <div class="tags">
+      <span class="tag">Light sidebar</span><span class="tag">List/table view</span>
+      <span class="tag">Filter chips</span><span class="tag">Scannable</span>
+    </div>
+  </div>
+  <div class="mockup-frame">
+    <div class="browser-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="url-bar">localhost:3000 – kindergarten-canvas admin</span></div>
+    <div class="d4-layout">
+      <aside class="d4-sidebar">
+        <div class="logo">kindergarten-canvas</div>
+        <div class="nav-item active"><span class="icon">🏠</span> Начало</div>
+        <div class="nav-item"><span class="icon">📰</span> Новини</div>
+        <div class="nav-item"><span class="icon">💼</span> Работни места</div>
+        <div class="nav-item"><span class="icon">📅</span> Срокове</div>
+        <div class="nav-item"><span class="icon">🎉</span> Gang</div>
+        <div class="nav-item"><span class="icon">🖼️</span> Галерия</div>
+        <div class="nav-item"><span class="icon">👨‍🏫</span> Учители</div>
+        <div class="nav-divider"></div>
+        <div class="nav-item"><span class="icon">⚙️</span> Настройки</div>
+      </aside>
+      <main class="d4-main">
+        <div class="page-header">
+          <h2>Всички публикации</h2>
+          <button class="btn-primary">+ Нова публикация</button>
+        </div>
+        <div class="d4-filter-bar">
+          <button class="filter-chip active">Всички</button>
+          <button class="filter-chip">📰 Новини</button>
+          <button class="filter-chip">💼 Работни</button>
+          <button class="filter-chip">📅 Срокове</button>
+          <button class="filter-chip">🎉 Gang</button>
+          <button class="filter-chip" style="margin-left:12px;">✓ Публику.</button>
+          <button class="filter-chip">📝 Черноко.</button>
+        </div>
+        <div class="list-container">
+          <div class="list-header"><span>Наименование</span><span>Тип</span><span>Статус</span><span>Дата</span></div>
+          <div class="list-item"><div class="item-name"><div class="type-icon" style="background:#EFF6FF;">📰</div><span class="name-text">Масленица в детската градина</span></div><span style="font-size:13px;color:#64748B;">Новина</span><span class="badge badge-published">Публик.</span><span style="font-size:13px;color:#64748B;">03.02.2026</span></div>
+          <div class="list-item"><div class="item-name"><div class="type-icon" style="background:#EFF6FF;">📰</div><span class="name-text">Промена в разписанията</span></div><span style="font-size:13px;color:#64748B;">Новина</span><span class="badge badge-published">Публик.</span><span style="font-size:13px;color:#64748B;">01.02.2026</span></div>
+          <div class="list-item"><div class="item-name"><div class="type-icon" style="background:#FEF3C7;">💼</div><span class="name-text">Помощник-учител</span></div><span style="font-size:13px;color:#64748B;">Работна</span><span class="badge badge-draft">Черноко.</span><span style="font-size:13px;color:#64748B;">–</span></div>
+          <div class="list-item"><div class="item-name"><div class="type-icon" style="background:#ECFDF5;">⏰</div><span class="name-text">Срок за документи</span></div><span style="font-size:13px;color:#64748B;">Срок</span><span class="badge badge-published">Публик.</span><span style="font-size:13px;color:#64748B;">15.02.2026</span></div>
+          <div class="list-item"><div class="item-name"><div class="type-icon" style="background:#EDE9FE;">🎉</div><span class="name-text">Пролетен фестивал</span></div><span style="font-size:13px;color:#64748B;">Gang</span><span class="badge badge-draft">Черноко.</span><span style="font-size:13px;color:#64748B;">–</span></div>
+          <div class="list-item"><div class="item-name"><div class="type-icon" style="background:#FEF3C7;">🖼️</div><span class="name-text">Альбум – Зимни игри</span></div><span style="font-size:13px;color:#64748B;">Галерия</span><span class="badge badge-published">Публик.</span><span style="font-size:13px;color:#64748B;">29.01.2026</span></div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <div class="eval-panel">
+    <h3>Direction 4 – Key Characteristics</h3>
+    <div class="eval-grid">
+      <div class="eval-item"><div class="ei-label">Layout</div><div class="ei-value">List view shows all content types in one place. Filter chips let users narrow down quickly. Very scannable.</div></div>
+      <div class="eval-item"><div class="ei-label">Primary Action</div><div class="ei-value">Single "+ New" button at top. Filter chips help find existing content. Good for returning users who know what they need.</div></div>
+      <div class="eval-item"><div class="ei-label">Status Visibility</div><div class="ei-value">Status column shows badge per item. Color-coded type icons distinguish content types. Very clear at a glance.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- DIRECTION 5: Dark Mode Dashboard               -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="d5" class="direction">
+  <div class="direction-header">
+    <h2>Direction 5 – Dark Mode Dashboard</h2>
+    <p>Full dark theme application of Direction 1's card layout. Shows how the design system's dark mode tokens look in practice. Status colors (green/amber) remain vibrant and clear against the dark background.</p>
+    <div class="tags">
+      <span class="tag">Dark theme</span><span class="tag">Card grid</span>
+      <span class="tag">High contrast badges</span><span class="tag">Professional feel</span>
+    </div>
+  </div>
+  <div class="mockup-frame">
+    <div class="browser-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="url-bar">localhost:3000 – kindergarten-canvas admin (dark)</span></div>
+    <div class="d5-layout">
+      <aside class="d5-sidebar">
+        <div class="logo">kindergarten-canvas</div>
+        <div class="nav-item active"><span class="icon">🏠</span> Начало</div>
+        <div class="nav-item"><span class="icon">📰</span> Новини</div>
+        <div class="nav-item"><span class="icon">💼</span> Работни</div>
+        <div class="nav-item"><span class="icon">📅</span> Срокове</div>
+        <div class="nav-item"><span class="icon">🎉</span> Gang</div>
+        <div class="nav-item"><span class="icon">🖼️</span> Галерия</div>
+        <div class="nav-item"><span class="icon">👨‍🏫</span> Учители</div>
+        <div class="nav-divider"></div>
+        <div class="nav-item"><span class="icon">⚙️</span> Настройки</div>
+      </aside>
+      <main class="d5-main">
+        <div class="page-header">
+          <h2>Начало</h2>
+          <button class="d5-btn-primary">+ Нова публикация</button>
+        </div>
+        <div class="d5-card-grid">
+          <div class="d5-card"><div class="card-header"><span class="card-icon">📰</span><span class="badge badge-published">3 публик.</span></div><div class="card-title">Новини</div><div class="card-meta">Последна: днес</div><div class="card-stats"><span class="stat"><strong>3</strong> активни</span><span class="stat"><strong>1</strong> черноко.</span></div><button class="card-create-btn">+ Нова новина</button></div>
+          <div class="d5-card"><div class="card-header"><span class="card-icon">💼</span><span class="badge badge-draft">1 черноко.</span></div><div class="card-title">Работни места</div><div class="card-meta">2 заявки</div><div class="card-stats"><span class="stat"><strong>2</strong> активни</span><span class="stat"><strong>1</strong> черноко.</span></div><button class="card-create-btn">+ Ново работно</button></div>
+          <div class="d5-card"><div class="card-header"><span class="card-icon">⏰</span><span class="badge badge-published">2 публик.</span></div><div class="card-title">Срокове</div><div class="card-meta">Следващият: 15.02</div><div class="card-stats"><span class="stat"><strong>2</strong> активни</span><span class="stat"><strong>0</strong> черноко.</span></div><button class="card-create-btn">+ Нов срок</button></div>
+          <div class="d5-card"><div class="card-header"><span class="card-icon">🎉</span><span class="badge badge-published">1 публик.</span></div><div class="card-title">Gang</div><div class="card-meta">Следващият: 20.02</div><div class="card-stats"><span class="stat"><strong>1</strong> активна</span><span class="stat"><strong>2</strong> черноко.</span></div><button class="card-create-btn">+ Нова gang</button></div>
+          <div class="d5-card"><div class="card-header"><span class="card-icon">🖼️</span><span class="badge badge-published">5 альбома</span></div><div class="card-title">Галерия</div><div class="card-meta">24 снимки</div><div class="card-stats"><span class="stat"><strong>24</strong> снимки</span><span class="stat"><strong>5</strong> альбома</span></div><button class="card-create-btn">+ Нов альбум</button></div>
+          <div class="d5-card"><div class="card-header"><span class="card-icon">👨‍🏫</span><span class="badge badge-published">4 профила</span></div><div class="card-title">Учители</div><div class="card-meta">4 активни</div><div class="card-stats"><span class="stat"><strong>4</strong> активни</span><span class="stat"><strong>1</strong> черноко.</span></div><button class="card-create-btn">+ Нов учител</button></div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <div class="eval-panel">
+    <h3>Direction 5 – Key Characteristics</h3>
+    <div class="eval-grid">
+      <div class="eval-item"><div class="ei-label">Layout</div><div class="ei-value">Same card structure as Direction 1, but in dark theme. Shows how status badges pop against dark backgrounds - very readable.</div></div>
+      <div class="eval-item"><div class="ei-label">Primary Action</div><div class="ei-value">Create buttons remain blue and clear even in dark mode. The primary action stands out strongly against dark card backgrounds.</div></div>
+      <div class="eval-item"><div class="ei-label">Status Visibility</div><div class="ei-value">Green and amber badges are highly visible on dark cards. Color contrast is actually stronger in dark mode for status indicators.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- DIRECTION 6: Compact with Collapsible Sections -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="d6" class="direction">
+  <div class="direction-header">
+    <h2>Direction 6 – Compact with Quick Actions</h2>
+    <p>Slightly narrower sidebar. Top row of quick-action buttons for the most common tasks. Content sections below are collapsible, showing recent items per type. Efficient for returning users.</p>
+    <div class="tags">
+      <span class="tag">Quick action row</span><span class="tag">Collapsible sections</span>
+      <span class="tag">Compact but airy</span><span class="tag">Returning-user focus</span>
+    </div>
+  </div>
+  <div class="mockup-frame">
+    <div class="browser-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="url-bar">localhost:3000 – kindergarten-canvas admin</span></div>
+    <div class="d6-layout">
+      <aside class="d6-sidebar">
+        <div class="logo">kindergarten-canvas</div>
+        <div class="nav-item active"><span class="icon">🏠</span> Начало</div>
+        <div class="nav-item"><span class="icon">📰</span> Новини</div>
+        <div class="nav-item"><span class="icon">💼</span> Работни</div>
+        <div class="nav-item"><span class="icon">📅</span> Срокове</div>
+        <div class="nav-item"><span class="icon">🎉</span> Gang</div>
+        <div class="nav-item"><span class="icon">🖼️</span> Галерия</div>
+        <div class="nav-item"><span class="icon">👨‍🏫</span> Учители</div>
+        <div class="nav-divider"></div>
+        <div class="nav-item"><span class="icon">⚙️</span> Настройки</div>
+      </aside>
+      <main class="d6-main">
+        <div class="page-header">
+          <h2>Начало</h2>
+        </div>
+        <div class="d6-quick-row">
+          <div class="d6-quick-action"><div class="qa-icon">📰</div><div class="qa-label">Нова новина</div></div>
+          <div class="d6-quick-action"><div class="qa-icon">🖼️</div><div class="qa-label">Альбум</div></div>
+          <div class="d6-quick-action"><div class="qa-icon">💼</div><div class="qa-label">Работна</div></div>
+          <div class="d6-quick-action"><div class="qa-icon">⏰</div><div class="qa-label">Срок</div></div>
+          <div class="d6-quick-action"><div class="qa-icon">🎉</div><div class="qa-label">Gang</div></div>
+        </div>
+        <div class="d6-content-sections">
+          <div class="d6-section">
+            <div class="d6-section-header"><div class="sh-left"><span class="sh-icon">📰</span><span class="sh-title">Новини</span><span class="sh-count">3 публик. · 1 черноко.</span></div><span class="sh-add">+</span></div>
+            <div class="d6-section-items">
+              <div class="d6-section-item"><span class="si-title">Масленица в детската градина</span><span class="badge badge-published" style="font-size:11px;">Публик.</span><span class="si-date">03.02</span></div>
+              <div class="d6-section-item"><span class="si-title">Промена в разписанията</span><span class="badge badge-published" style="font-size:11px;">Публик.</span><span class="si-date">01.02</span></div>
+            </div>
+          </div>
+          <div class="d6-section">
+            <div class="d6-section-header"><div class="sh-left"><span class="sh-icon">💼</span><span class="sh-title">Работни места</span><span class="sh-count">2 активни · 1 черноко.</span></div><span class="sh-add">+</span></div>
+            <div class="d6-section-items">
+              <div class="d6-section-item"><span class="si-title">Помощник-учител</span><span class="badge badge-draft" style="font-size:11px;">Черноко.</span><span class="si-date">–</span></div>
+            </div>
+          </div>
+          <div class="d6-section">
+            <div class="d6-section-header"><div class="sh-left"><span class="sh-icon">⏰</span><span class="sh-title">Срокове</span><span class="sh-count">2 активни</span></div><span class="sh-add">+</span></div>
+            <div class="d6-section-items">
+              <div class="d6-section-item"><span class="si-title">Срок за документи</span><span class="badge badge-published" style="font-size:11px;">Публик.</span><span class="si-date">15.02</span></div>
+            </div>
+          </div>
+          <div class="d6-section">
+            <div class="d6-section-header"><div class="sh-left"><span class="sh-icon">🎉</span><span class="sh-title">Gang</span><span class="sh-count">1 активна · 2 черноко.</span></div><span class="sh-add">+</span></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <div class="eval-panel">
+    <h3>Direction 6 – Key Characteristics</h3>
+    <div class="eval-grid">
+      <div class="eval-item"><div class="ei-label">Layout</div><div class="ei-value">Quick-action row at top for fastest content creation. Collapsible sections show recent items per type. Efficient for daily use.</div></div>
+      <div class="eval-item"><div class="ei-label">Primary Action</div><div class="ei-value">Quick-action cards at the top are the fastest path. Each is a single tap. "+" buttons on sections for contextual creation.</div></div>
+      <div class="eval-item"><div class="ei-label">Status Visibility</div><div class="ei-value">Section headers show published/draft counts. Each item shows its status badge inline. Collapsible keeps it scannable.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- JAVASCRIPT                                     -->
+<!-- ═══════════════════════════════════════════════ -->
+<script>
+function show(id) {
+  document.querySelectorAll('.direction').forEach(d => d.classList.remove('active'));
+  document.querySelectorAll('.direction-tabs button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.direction-tabs button').forEach(b => {
+    if (b.textContent.toLowerCase().startsWith(id.replace('d',''))) b.classList.add('active');
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

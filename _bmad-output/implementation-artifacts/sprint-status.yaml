@@ -1,0 +1,140 @@
+# generated: 2026-02-03
+# project: kindergarten-canvas
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-02-03
+project: kindergarten-canvas
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  # Epic 1: Project Foundation & Authentication
+  epic-1: in-progress
+  1-1-monorepo-structure-setup: done
+  1-2-backend-api-foundation: backlog
+  1-3-user-model-and-database-setup: backlog
+  1-4-jwt-authentication-api: backlog
+  1-5-session-management-and-token-refresh: backlog
+  1-6-frontend-authentication-integration: backlog
+  epic-1-retrospective: optional
+
+  # Epic 2: Admin Dashboard & Navigation
+  epic-2: backlog
+  2-1-bulgarian-translation-system: backlog
+  2-2-admin-layout-shell-with-responsive-sidebar: backlog
+  2-3-dashboard-with-content-type-cards: backlog
+  2-4-statusbadge-component: backlog
+  2-5-help-modal: backlog
+  epic-2-retrospective: optional
+
+  # Epic 3: News Content Management (Golden Path)
+  epic-3: backlog
+  3-1-news-prisma-model: backlog
+  3-2-news-crud-api-endpoints: backlog
+  3-3-cloudinary-image-upload-service: backlog
+  3-4-news-list-view: backlog
+  3-5-news-creation-form-with-tiptap-editor: backlog
+  3-6-auto-save-functionality: backlog
+  3-7-preview-modal: backlog
+  3-8-publish-and-update-workflow: backlog
+  3-9-delete-confirmation-dialog: backlog
+  3-10-real-time-preview-websocket: backlog
+  3-11-public-news-display-integration: backlog
+  epic-3-retrospective: optional
+
+  # Epic 4: Teacher Profiles Management
+  epic-4: backlog
+  4-1-teacher-prisma-model: backlog
+  4-2-teacher-crud-api-endpoints: backlog
+  4-3-teacher-list-and-form: backlog
+  4-4-public-teacher-profiles-display: backlog
+  epic-4-retrospective: optional
+
+  # Epic 5: Events & Deadlines Management
+  epic-5: backlog
+  5-1-event-and-deadline-prisma-models: backlog
+  5-2-events-crud-api-endpoints: backlog
+  5-3-deadlines-crud-api-endpoints: backlog
+  5-4-date-picker-component-with-bulgarian-locale: backlog
+  5-5-events-list-and-form: backlog
+  5-6-deadlines-list-and-form: backlog
+  5-7-public-events-and-deadlines-display: backlog
+  epic-5-retrospective: optional
+
+  # Epic 6: Job Postings & Applications
+  epic-6: backlog
+  6-1-job-prisma-model: backlog
+  6-2-jobs-crud-api-endpoints: backlog
+  6-3-jobs-list-and-form-in-admin: backlog
+  6-4-public-job-postings-display: backlog
+  6-5-job-application-form: backlog
+  6-6-cv-upload-and-validation: backlog
+  6-7-application-email-to-admin-with-cv: backlog
+  6-8-confirmation-email-to-applicant: backlog
+  epic-6-retrospective: optional
+
+  # Epic 7: Photo Gallery Management
+  epic-7: backlog
+  7-1-gallery-prisma-model: backlog
+  7-2-gallery-crud-api-endpoints: backlog
+  7-3-multi-image-upload-for-gallery: backlog
+  7-4-gallery-list-and-form: backlog
+  7-5-public-gallery-display: backlog
+  epic-7-retrospective: optional
+
+  # Epic 8: Email Notification System
+  epic-8: backlog
+  8-1-email-subscriber-model: backlog
+  8-2-parent-subscription-management-api: backlog
+  8-3-aws-ses-email-service-integration: backlog
+  8-4-publish-trigger-notifications: backlog
+  epic-8-retrospective: optional
+
+  # Epic 9: Public Website API Integration
+  epic-9: backlog
+  9-1-unified-public-content-api: backlog
+  9-2-individual-content-detail-pages: backlog
+  9-3-health-check-and-monitoring-endpoints: backlog
+  9-4-centralized-error-logging: backlog
+  9-5-environment-configuration-and-developer-access: backlog
+  epic-9-retrospective: optional
+
+# FUTURE ENHANCEMENTS (to be scheduled)
+# =====================================
+# These items were identified during development but deferred for future stories:
+#
+# - scroll-to-top-on-navigation: Add ScrollToTop component to automatically scroll
+#   to top when navigating between pages. Currently some pages don't scroll to top
+#   when accessed via hamburger menu navigation. (Identified during Story 1.1 review)

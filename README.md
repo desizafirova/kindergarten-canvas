@@ -1,73 +1,81 @@
-# Welcome to your Lovable project
+# Kindergarten Canvas
 
-## Project info
+A comprehensive web application for kindergarten management with public website and admin panel.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Project Structure
 
-## How can I edit this code?
+This is a monorepo containing:
 
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+kindergarten-canvas/
+├── frontend/     # React public website and admin panel (Vite + TypeScript + Tailwind)
+├── backend/      # Express API server (TypeScript + Prisma + PostgreSQL)
+├── shared/       # Shared TypeScript types between frontend and backend
+├── _bmad/        # BMAD configuration
+└── _bmad-output/ # Planning and implementation artifacts
 ```
 
-**Edit a file directly in GitHub**
+## Getting Started
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Frontend (Public Website)
 
-**Use GitHub Codespaces**
+```bash
+cd frontend
+npm install
+npm run dev
+# Opens at http://localhost:5173
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Backend (API Server)
 
-## What technologies are used for this project?
+```bash
+cd backend
+npm install
+npm run dev
+# Opens at http://localhost:3344
+```
 
-This project is built with:
+> **Note:** Backend setup will be completed in Story 1.2
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Technology Stack
 
-## How can I deploy this project?
+### Frontend
+- **Framework:** React 18+ with TypeScript
+- **Build Tool:** Vite
+- **Styling:** Tailwind CSS
+- **Components:** shadcn-ui
+- **Routing:** React Router
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+### Backend (Planned)
+- **Runtime:** Node.js with Express
+- **Database:** PostgreSQL with Prisma ORM
+- **Authentication:** JWT with bcrypt
+- **Logging:** Winston
 
-## Can I connect a custom domain to my Lovable project?
+### Shared
+- TypeScript type definitions shared between frontend and backend
+- Enables type safety across the full stack
 
-Yes, you can!
+## Documentation
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- [PRD](_bmad-output/planning-artifacts/prd.md)
+- [Architecture](_bmad-output/planning-artifacts/architecture.md)
+- [Epics & Stories](_bmad-output/planning-artifacts/epics.md)
+- [Sprint Status](_bmad-output/implementation-artifacts/sprint-status.yaml)
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Development Workflow
+
+This project uses the BMAD (Business Method for AI Development) workflow:
+
+1. **Planning:** PRD → Architecture → UX Design → Epics & Stories
+2. **Implementation:** Story creation → Development → Code review
+3. **Tracking:** Sprint status file tracks progress through all epics
+
+## Deployment
+
+- **Frontend:** Vercel (deploy `frontend/` folder)
+- **Backend:** Render (deploy `backend/` folder with PostgreSQL)
+
+---
+
+*Originally scaffolded with [Lovable](https://lovable.dev)*

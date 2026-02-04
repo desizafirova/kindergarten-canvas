@@ -1,0 +1,12 @@
+{
+  "name": "@kindergarten-canvas/shared",
+  "version": "1.0.0",
+  "main": "types/index.ts",
+  "types": "types/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
