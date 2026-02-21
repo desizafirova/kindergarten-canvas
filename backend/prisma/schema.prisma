@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Role enum for admin users
+enum Role {
+  ADMIN
+  DEVELOPER
+}
+
+// NewsStatus enum for news workflow states
+enum NewsStatus {
+  DRAFT // Content saved but not visible to public
+  PUBLISHED // Content visible on public website
+}
+
+// User model for administrator accounts (login credentials, role)
+// Only for admin panel access - not related to public website users
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// NewsItem model for news/announcements content management
+// Supports draft/publish workflow with optional images
+model NewsItem {
+  id          Int        @id @default(autoincrement())
+  title       String
+  content     String // Stores HTML from TipTap editor
+  imageUrl    String? // Optional - Cloudinary URL from Story 3.3
+  status      NewsStatus @default(DRAFT)
+  publishedAt DateTime? // Set when status changes to PUBLISHED
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([status]) // Index for filtering by DRAFT/PUBLISHED status
+  @@map("news_items") // PostgreSQL table name (snake_case convention)
+}
