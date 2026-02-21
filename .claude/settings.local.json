@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(if not exist \".claude\" mkdir .claude)",
-      "Bash(npm install)"
+      "Bash(npm install)",
+      "Bash(psql:*)",
+      "Bash(taskkill:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   },
   "mcpServers": {
