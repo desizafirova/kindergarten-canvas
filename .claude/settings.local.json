@@ -6,7 +6,13 @@
       "Bash(psql:*)",
       "Bash(taskkill:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(del \"\\\\?\\\\C:\\\\Users\\\\Emo\\\\Desktop\\\\kindergarten-canvas\\\\nul\")",
+      "Bash(del \"\\\\?\\\\C:\\\\Users\\\\Emo\\\\Desktop\\\\kindergarten-canvas\\\\backend\\\\nul\")",
+      "Bash(npm install:*)",
+      "Bash(ls:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm test:*)"
     ]
   },
   "mcpServers": {

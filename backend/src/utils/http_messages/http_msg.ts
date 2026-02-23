@@ -7,6 +7,14 @@ export default {
         };
         return { httpStatusCode: 200, data: params };
     },
+    http400(customMsg: string, error: any) {
+        const params = {
+            success: false,
+            message: customMsg || 'Bad Request',
+            error: error || null,
+        };
+        return { httpStatusCode: 400, data: params };
+    },
     http201(data: any) {
         const params = {
             success: true,

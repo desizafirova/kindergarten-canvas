@@ -1,0 +1,1 @@
+{"version":3,"file":"global_api_path.js","sourceRoot":"","sources":["../../../../src/utils/global_api_path/global_api_path.ts"],"names":[],"mappings":";;;;;AAAA,sDAAiC;AAEjC,kBAAe,GAAG,EAAE;IAChB,IAAI,IAAI,GAAG,EAAE,CAAC;IAGd,IAAI,aAAM,CAAC,GAAG,CAAC,MAAM;QAAE,IAAI,GAAG,IAAI,aAAM,CAAC,GAAG,CAAC,MAAM,EAAE,CAAC;IAEtD,OAAO,IAAI,CAAC;AAChB,CAAC,CAAC"}

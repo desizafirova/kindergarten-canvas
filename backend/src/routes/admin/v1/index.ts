@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import usersRoute from './users_route';
 import newsRoute from './news_route';
+import uploadRoute from './upload_route';
 
 const router = Router();
 
@@ -12,6 +13,10 @@ const defaultRoutes = [
     {
         path: '/news',
         route: newsRoute,
+    },
+    {
+        path: '/upload',
+        route: uploadRoute,
     },
 ];
 

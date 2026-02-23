@@ -1,6 +1,6 @@
 # Story 3.2: News CRUD API Endpoints
 
-Status: in-progress
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

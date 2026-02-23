@@ -63,7 +63,7 @@ development_status:
   epic-3: in-progress
   3-1-news-prisma-model: done
   3-2-news-crud-api-endpoints: in-progress
-  3-3-cloudinary-image-upload-service: backlog
+  3-3-cloudinary-image-upload-service: done
   3-4-news-list-view: backlog
   3-5-news-creation-form-with-tiptap-editor: backlog
   3-6-auto-save-functionality: backlog
@@ -138,3 +138,7 @@ development_status:
 # - scroll-to-top-on-navigation: Add ScrollToTop component to automatically scroll
 #   to top when navigating between pages. Currently some pages don't scroll to top
 #   when accessed via hamburger menu navigation. (Identified during Story 1.1 review)
+#
+# - upload-progress-tracking: Add WebSocket/SSE support for real-time upload progress
+#   tracking (0-100%). Deferred from Story 3.3 - for ≤10MB files, loading spinner
+#   provides adequate UX. (Identified during Story 3.3 review)
