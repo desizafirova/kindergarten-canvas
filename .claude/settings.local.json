@@ -27,6 +27,13 @@
         "claude-code",
         "--project",
         "."
+      ],
+      "exclude": [
+        "**/*test.*",
+        "**/*spec.*",
+        "node_modules/**",
+        "dist/**",
+        "**/__tests__/**"
       ]
     }
   }

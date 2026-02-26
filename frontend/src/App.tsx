@@ -17,6 +17,9 @@ import Documents from "./pages/Documents";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/admin/Login";
 import Dashboard from "./pages/admin/Dashboard";
+import NewsList from "./pages/admin/NewsList";
+import { NewsCreate } from "./pages/admin/NewsCreate";
+import { NewsEdit } from "./pages/admin/NewsEdit";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +49,36 @@ const App = () => (
                 <ProtectedRoute>
                   <AdminLayout>
                     <Dashboard />
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/news"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <NewsList />
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/news/create"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <NewsCreate />
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/news/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <NewsEdit />
                   </AdminLayout>
                 </ProtectedRoute>
               }

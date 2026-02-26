@@ -64,9 +64,9 @@ development_status:
   3-1-news-prisma-model: done
   3-2-news-crud-api-endpoints: in-progress
   3-3-cloudinary-image-upload-service: done
-  3-4-news-list-view: backlog
-  3-5-news-creation-form-with-tiptap-editor: backlog
-  3-6-auto-save-functionality: backlog
+  3-4-news-list-view: done
+  3-5-news-creation-form-with-tiptap-editor: done
+  3-6-auto-save-functionality: review
   3-7-preview-modal: backlog
   3-8-publish-and-update-workflow: backlog
   3-9-delete-confirmation-dialog: backlog
@@ -142,3 +142,7 @@ development_status:
 # - upload-progress-tracking: Add WebSocket/SSE support for real-time upload progress
 #   tracking (0-100%). Deferred from Story 3.3 - for ≤10MB files, loading spinner
 #   provides adequate UX. (Identified during Story 3.3 review)
+#
+# - msw-api-testing: Set up MSW (Mock Service Worker) for comprehensive API integration
+#   tests. Currently NewsCreate tests cover UI behavior but API calls, toasts, and
+#   navigation are mocked at component level. (Identified during Story 3.5 code review)

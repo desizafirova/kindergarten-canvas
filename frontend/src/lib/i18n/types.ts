@@ -101,6 +101,67 @@ export interface Translations {
       };
     };
   };
+  newsList: {
+    title: string;
+    subtitle: string;
+    emptyState: string;
+    emptyFilteredState: string;
+    createButton: string;
+    filterAll: string;
+    filterDrafts: string;
+    filterPublished: string;
+    deleteSuccess: string;
+    deleteError: string;
+    loadError: string;
+    retryButton: string;
+    itemDeleted: string;
+  };
+  newsForm: {
+    title: string;
+    createTitle: string;
+    editTitle: string;
+    titleLabel: string;
+    titlePlaceholder: string;
+    contentLabel: string;
+    imageLabel: string;
+    saveDraft: string;
+    publish: string;
+    update: string;
+    preview: string;
+    errors: {
+      titleRequired: string;
+      contentRequired: string;
+      imageUploadFailed: string;
+      saveFailed: string;
+      publishFailed: string;
+    };
+    success: {
+      saved: string;
+      published: string;
+      updated: string;
+    };
+    breadcrumb: {
+      news: string;
+      create: string;
+      edit: string;
+    };
+  };
+  tiptapToolbar: {
+    bold: string;
+    italic: string;
+    underline: string;
+    bulletList: string;
+    orderedList: string;
+    h2: string;
+    h3: string;
+    link: string;
+  };
+  autoSave: {
+    saving: string;
+    saved: string;
+    error: string;
+    retrying: string;
+  };
 }
 
 /**
