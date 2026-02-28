@@ -6,12 +6,12 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { AdminLayout } from "@/components/layout/AdminLayout";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
 import Groups from "./pages/Groups";
 import Admission from "./pages/Admission";
 import DailySchedule from "./pages/DailySchedule";
 import Careers from "./pages/Careers";
-import News from "./pages/News";
 import WeeklyMenu from "./pages/WeeklyMenu";
 import Documents from "./pages/Documents";
 import NotFound from "./pages/NotFound";
@@ -20,6 +20,8 @@ import Dashboard from "./pages/admin/Dashboard";
 import NewsList from "./pages/admin/NewsList";
 import { NewsCreate } from "./pages/admin/NewsCreate";
 import { NewsEdit } from "./pages/admin/NewsEdit";
+import { NewsListPage } from "./pages/public/NewsListPage";
+import { NewsDetailPage } from "./pages/public/NewsDetailPage";
 
 const queryClient = new QueryClient();
 
@@ -37,7 +39,8 @@ const App = () => (
             <Route path="/admission" element={<Admission />} />
             <Route path="/daily-schedule" element={<DailySchedule />} />
             <Route path="/careers" element={<Careers />} />
-            <Route path="/news" element={<News />} />
+            <Route path="/news" element={<ErrorBoundary><NewsListPage /></ErrorBoundary>} />
+            <Route path="/news/:id" element={<ErrorBoundary><NewsDetailPage /></ErrorBoundary>} />
             <Route path="/menu" element={<WeeklyMenu />} />
             <Route path="/documents" element={<Documents />} />
 

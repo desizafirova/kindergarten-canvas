@@ -12,7 +12,7 @@ export const createNews = z.object({
                 required_error: 'Съдържанието е задължително',
             })
             .min(1, 'Съдържанието е задължително'),
-        imageUrl: z.string().url().optional(),
+        imageUrl: z.string().url().optional().nullable(),
         status: z.enum(['DRAFT', 'PUBLISHED']).optional(),
     }),
 });

@@ -18,11 +18,18 @@ vi.mock('@/lib/i18n', () => ({
       titlePlaceholder: 'Въведете заглавие...',
       contentLabel: 'Съдържание',
       imageLabel: 'Изображение (по избор)',
+      saveDraft: 'Запази чернова',
+      publish: 'Публикувай',
       update: 'Обнови',
+      preview: 'Преглед',
+      viewOnSite: 'Виж на сайта',
       errors: {
         saveFailed: 'Грешка при запазване',
+        publishFailed: 'Грешка при публикуване',
       },
       success: {
+        saved: 'Новината е запазена успешно',
+        published: 'Новината е публикувана успешно',
         updated: 'Новината е обновена успешно',
       },
       breadcrumb: {
@@ -30,11 +37,30 @@ vi.mock('@/lib/i18n', () => ({
         edit: 'Редактиране',
       },
     },
+    buttons: {
+      save: 'Запази',
+      update: 'Обнови',
+    },
+    common: {
+      loading: 'Зареждане...',
+    },
     autoSave: {
       saving: 'Запазва...',
       saved: 'Запазено',
       error: 'Грешка при запазване',
       retrying: 'Опитва отново...',
+    },
+    previewModal: {
+      close: 'Затвори',
+      previewOf: 'Преглед на',
+      description: 'Преглед на съдържанието преди публикуване',
+    },
+    previewPane: {
+      title: 'Преглед на живо',
+      unavailable: 'Прегледът не е наличен',
+      connecting: 'Свързване...',
+      connected: 'Свързан',
+      disconnected: 'Връзката е прекъсната',
     },
   }),
 }));
@@ -44,6 +70,27 @@ vi.mock('sonner', () => ({
     success: vi.fn(),
     error: vi.fn(),
   },
+}));
+
+// Mock WebSocket-related modules
+vi.mock('@/lib/socket', () => ({
+  getSocket: vi.fn(() => ({
+    connect: vi.fn(),
+    disconnect: vi.fn(),
+    on: vi.fn(),
+    off: vi.fn(),
+    emit: vi.fn(),
+    connected: false,
+  })),
+  disconnectSocket: vi.fn(),
+}));
+
+vi.mock('@/hooks/useWebSocketPreview', () => ({
+  useWebSocketPreview: vi.fn(() => ({
+    connectionStatus: 'disconnected',
+    previewHtml: '',
+    isPreviewAvailable: false,
+  })),
 }));
 
 const mockNavigate = vi.fn();
@@ -435,6 +482,300 @@ describe('NewsEdit', () => {
       });
 
       consoleSpy.mockRestore();
+    });
+  });
+
+  describe('Preview Modal Integration', () => {
+    beforeEach(() => {
+      vi.spyOn(api, 'get').mockResolvedValue({
+        data: { content: { ...mockNewsData, publishedAt: '2024-03-20T12:00:00Z' } },
+      });
+    });
+
+    it('preview button is visible and enabled', async () => {
+      renderComponent();
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Existing News')).toBeInTheDocument();
+      });
+
+      const previewButton = screen.getByRole('button', { name: 'Преглед' });
+      expect(previewButton).toBeInTheDocument();
+      expect(previewButton).toBeEnabled();
+    });
+
+    it('clicking preview button opens PreviewModal', async () => {
+      renderComponent();
+      const user = userEvent.setup();
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Existing News')).toBeInTheDocument();
+      });
+
+      const previewButton = screen.getByRole('button', { name: 'Преглед' });
+      await user.click(previewButton);
+
+      // Check that modal is open
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+    });
+
+    it('PreviewModal displays current form values', async () => {
+      renderComponent();
+      const user = userEvent.setup();
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Existing News')).toBeInTheDocument();
+      });
+
+      // Open preview
+      const previewButton = screen.getByRole('button', { name: 'Преглед' });
+      await user.click(previewButton);
+
+      // Check that title appears in modal
+      await waitFor(() => {
+        expect(screen.getByText('Преглед на Existing News')).toBeInTheDocument();
+      });
+
+      // Check that title appears in content area
+      const dialog = screen.getByRole('dialog');
+      const h1 = dialog.querySelector('h1');
+      expect(h1).toHaveTextContent('Existing News');
+    });
+
+    it('closing PreviewModal returns focus to Preview button', async () => {
+      renderComponent();
+      const user = userEvent.setup();
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Existing News')).toBeInTheDocument();
+      });
+
+      const previewButton = screen.getByRole('button', { name: 'Преглед' });
+      await user.click(previewButton);
+
+      // Modal should be open
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+
+      // Close modal using footer "Затвори" button (not the × button)
+      const dialog = screen.getByRole('dialog');
+      const closeButtons = dialog.querySelectorAll('button');
+      const footerCloseButton = Array.from(closeButtons).find(btn =>
+        !btn.className.includes('absolute') && btn.textContent?.includes('Затвори')
+      );
+
+      expect(footerCloseButton).toBeTruthy();
+      await user.click(footerCloseButton!);
+
+      // Modal should be closed
+      await waitFor(() => {
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      });
+    });
+
+    it('preview shows publishedAt date for published items', async () => {
+      renderComponent();
+      const user = userEvent.setup();
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Existing News')).toBeInTheDocument();
+      });
+
+      // Open preview
+      const previewButton = screen.getByRole('button', { name: 'Преглед' });
+      await user.click(previewButton);
+
+      // Check for published date (formatted as dd.MM.yyyy)
+      await waitFor(() => {
+        expect(screen.getByText('20.03.2024')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Publish/Update Functionality (Story 3.8)', () => {
+    beforeEach(() => {
+      window.open = vi.fn();
+    });
+
+    it('shows publish button for draft news', async () => {
+      vi.spyOn(api, 'get').mockResolvedValue({
+        data: { content: { ...mockNewsData, status: 'DRAFT' } },
+      });
+
+      renderComponent();
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Existing News')).toBeInTheDocument();
+      });
+
+      // Should show both save draft and publish buttons
+      expect(screen.getByRole('button', { name: 'Запази чернова' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Публикувай' })).toBeInTheDocument();
+
+      // Should NOT show update button
+      expect(screen.queryByRole('button', { name: 'Обнови' })).not.toBeInTheDocument();
+    });
+
+    it('shows update button for published news', async () => {
+      vi.spyOn(api, 'get').mockResolvedValue({
+        data: { content: { ...mockNewsData, status: 'PUBLISHED' } },
+      });
+
+      renderComponent();
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Existing News')).toBeInTheDocument();
+      });
+
+      // Should show save and update buttons
+      expect(screen.getByRole('button', { name: 'Запази' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Обнови' })).toBeInTheDocument();
+
+      // Should NOT show publish button
+      expect(screen.queryByRole('button', { name: 'Публикувай' })).not.toBeInTheDocument();
+    });
+
+    it('disables all buttons during publish operation', async () => {
+      vi.spyOn(api, 'get').mockResolvedValue({
+        data: { content: { ...mockNewsData, status: 'DRAFT' } },
+      });
+
+      // Mock PUT to never resolve (keeps loading state)
+      vi.spyOn(api, 'put').mockImplementation(
+        () => new Promise(() => {}) // Never resolves
+      );
+
+      renderComponent();
+      const user = userEvent.setup();
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Existing News')).toBeInTheDocument();
+      });
+
+      const publishButton = screen.getByRole('button', { name: 'Публикувай' });
+      const saveDraftButton = screen.getByRole('button', { name: 'Запази чернова' });
+      const previewButton = screen.getByRole('button', { name: 'Преглед' });
+
+      // Click publish
+      await user.click(publishButton);
+
+      // All buttons should be disabled during operation
+      await waitFor(() => {
+        expect(publishButton).toBeDisabled();
+        expect(saveDraftButton).toBeDisabled();
+        expect(previewButton).toBeDisabled();
+      });
+    });
+
+    it('disables all buttons during update operation', async () => {
+      vi.spyOn(api, 'get').mockResolvedValue({
+        data: { content: { ...mockNewsData, status: 'PUBLISHED' } },
+      });
+
+      // Mock PUT to never resolve (keeps loading state)
+      vi.spyOn(api, 'put').mockImplementation(
+        () => new Promise(() => {}) // Never resolves
+      );
+
+      renderComponent();
+      const user = userEvent.setup();
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Existing News')).toBeInTheDocument();
+      });
+
+      const updateButton = screen.getByRole('button', { name: 'Обнови' });
+      const saveButton = screen.getByRole('button', { name: 'Запази' });
+      const previewButton = screen.getByRole('button', { name: 'Преглед' });
+
+      // Click update
+      await user.click(updateButton);
+
+      // All buttons should be disabled during operation
+      await waitFor(() => {
+        expect(updateButton).toBeDisabled();
+        expect(saveButton).toBeDisabled();
+        expect(previewButton).toBeDisabled();
+      });
+    });
+
+    it('publish button disabled when form invalid', async () => {
+      vi.spyOn(api, 'get').mockResolvedValue({
+        data: { content: { ...mockNewsData, status: 'DRAFT', title: '' } },
+      });
+
+      renderComponent();
+      const user = userEvent.setup();
+
+      await waitFor(() => {
+        const titleInput = screen.getByLabelText('Заглавие');
+        expect(titleInput).toHaveValue('');
+      });
+
+      // Clear title to make form invalid
+      const titleInput = screen.getByLabelText('Заглавие');
+      await user.clear(titleInput);
+
+      const publishButton = screen.getByRole('button', { name: 'Публикувай' });
+
+      // Publish button should be disabled when form invalid
+      await waitFor(() => {
+        expect(publishButton).toBeDisabled();
+      });
+    });
+
+    // NOTE: Full API integration tests with toast.success showing link, publishedAt timestamp,
+    // and status updates require MSW or more sophisticated mocking. These tests validate
+    // component behavior and button states based on draft vs published status.
+    // Full E2E testing should be added in future testing enhancement story.
+  });
+
+  describe('Live Preview Integration (WebSocket)', () => {
+    it('renders LivePreviewPane component with existing news data', async () => {
+      render(
+        <BrowserRouter>
+          <NewsEdit />
+        </BrowserRouter>
+      );
+
+      // Wait for news to load
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test News Title')).toBeInTheDocument();
+      });
+
+      // Live preview pane should be rendered
+      const livePreviewPane = screen.getByText('Преглед на живо');
+      expect(livePreviewPane).toBeInTheDocument();
+    });
+
+    it('Preview Modal button remains functional for fallback', async () => {
+      render(
+        <BrowserRouter>
+          <NewsEdit />
+        </BrowserRouter>
+      );
+
+      // Wait for news to load
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test News Title')).toBeInTheDocument();
+      });
+
+      const previewButton = screen.getByRole('button', { name: 'Преглед' });
+      expect(previewButton).toBeInTheDocument();
+      expect(previewButton).not.toBeDisabled();
+
+      // Click preview button - modal should open regardless of WebSocket status
+      await act(async () => {
+        await userEvent.click(previewButton);
+      });
+
+      // Preview modal should appear (fallback functionality)
+      await waitFor(() => {
+        expect(screen.getByText(/Преглед на/i)).toBeInTheDocument();
+      });
     });
   });
 });

@@ -19,6 +19,7 @@ import config from '@config/app';
 import routes from '@routes/index';
 import routesUser from '@routes/client/v1';
 import routesAdmin from '@routes/admin/v1';
+import publicNewsRoutes from '@routes/public/news_route';
 
 const publicLogs = './logs';
 const publicFavicon = './public/assets/images/favicons/favicon.ico';
@@ -56,7 +57,8 @@ export default () => {
     app.use(baseApiUrl + '/logs', express.static(publicLogs, { dotfiles: 'allow' }));
     app.use(baseApiUrl + '/', routes);
     app.use(baseApiUrl + '/client/', routesUser);
-    app.use(baseApiUrl + '/admin/', routesAdmin);
+    app.use(baseApiUrl + '/admin/v1/', routesAdmin);
+    app.use(baseApiUrl + '/v1/public/news', publicNewsRoutes); // Public routes - NO authentication
 
     app.set('view engine', 'ejs');
     app.set('views', path.join(__dirname, views));

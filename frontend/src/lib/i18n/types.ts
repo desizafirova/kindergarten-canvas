@@ -21,10 +21,12 @@ export interface Translations {
     delete: string;
     save: string;
     publish: string;
+    update: string;
     cancel: string;
     close: string;
     login: string;
     help: string;
+    backToList: string;
   };
   status: {
     draft: string;
@@ -51,6 +53,8 @@ export interface Translations {
     emailRequired: string;
     passwordRequired: string;
     passwordMinLength: string;
+    newsNotFound: string;
+    newsLoadError: string;
   };
   success: {
     saved: string;
@@ -123,11 +127,13 @@ export interface Translations {
     titleLabel: string;
     titlePlaceholder: string;
     contentLabel: string;
+    contentPlaceholder: string;
     imageLabel: string;
     saveDraft: string;
     publish: string;
     update: string;
     preview: string;
+    viewOnSite: string;
     errors: {
       titleRequired: string;
       contentRequired: string;
@@ -161,6 +167,31 @@ export interface Translations {
     saved: string;
     error: string;
     retrying: string;
+  };
+  previewModal: {
+    close: string;
+    previewOf: string;
+    description: string;
+  };
+  deleteConfirmDialog: {
+    title: string;
+    message: string;
+    confirmMessage: string;
+  };
+  previewPane: {
+    title: string;
+    unavailable: string;
+    connecting: string;
+    connected: string;
+    disconnected: string;
+  };
+  publicNews: {
+    sectionTitle: string;
+    emptyState: string;
+    loading: string;
+    error: string;
+    backToList: string;
+    notFound: string;
   };
 }
 

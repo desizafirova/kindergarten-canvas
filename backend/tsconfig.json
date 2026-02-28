@@ -20,6 +20,7 @@
         "paths": {
             "@config/*": ["src/config/*"],
             "@server/*": ["src/server/*"],
+            "@socket/*": ["src/socket/*"],
             "@routes/*": ["src/routes/*"],
             "@middlewares/*": ["src/middlewares/*"],
             "@database/*": ["src/database/*"],

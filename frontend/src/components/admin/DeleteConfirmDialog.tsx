@@ -1,97 +1,74 @@
-import { AlertTriangle, Loader2 } from 'lucide-react';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { useTranslation } from '@/lib/i18n';
+import { Loader2 } from 'lucide-react';
 
 interface DeleteConfirmDialogProps {
-  isOpen: boolean;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   itemTitle: string;
+  onConfirm: () => Promise<void>;
   isDeleting: boolean;
-  onConfirm: () => void;
-  onCancel: () => void;
 }
 
 /**
  * DeleteConfirmDialog - Reusable confirmation dialog for destructive delete actions.
  *
  * Features:
- * - Displays item title and warning message in Bulgarian
- * - Cancel button (secondary, default focus) and Delete button (destructive red)
+ * - Uses AlertDialog (designed specifically for confirmations)
+ * - Displays item title and warning message from i18n translations
+ * - Cancel button (secondary, auto-focused) and Delete button (destructive red)
  * - Loading spinner when isDeleting is true
- * - Focus trap and escape key handling via Radix Dialog
- * - ARIA labels for accessibility
+ * - Focus trap and escape key handling via Radix AlertDialog
+ * - ARIA roles for accessibility
  */
 export function DeleteConfirmDialog({
-  isOpen,
+  open,
+  onOpenChange,
   itemTitle,
-  isDeleting,
   onConfirm,
-  onCancel,
+  isDeleting,
 }: DeleteConfirmDialogProps) {
   const t = useTranslation();
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && !isDeleting && onCancel()}>
-      <DialogContent
-        className="sm:max-w-[425px]"
-        aria-describedby="delete-dialog-description"
-      >
-        <DialogHeader>
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100">
-              <AlertTriangle className="h-5 w-5 text-red-600" aria-hidden="true" />
-            </div>
-            <DialogTitle className="text-left">
-              Изтриване на новина
-            </DialogTitle>
-          </div>
-          <DialogDescription id="delete-dialog-description" className="text-left pt-4">
-            Сигурни ли сте, че искате да изтриете <strong className="font-semibold text-gray-900">"{itemTitle}"</strong>?
-            <br />
-            <span className="text-red-600 font-medium mt-2 block">
-              Това действие не може да бъде отменено.
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{t.deleteConfirmDialog.title}</AlertDialogTitle>
+          <AlertDialogDescription>
+            {t.deleteConfirmDialog.message}
+            <span className="font-semibold block mt-2">{itemTitle}</span>
+            <span className="text-muted-foreground text-xs block mt-2">
+              {t.deleteConfirmDialog.confirmMessage}
             </span>
-          </DialogDescription>
-        </DialogHeader>
-
-        <DialogFooter className="gap-2 sm:gap-0">
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={onCancel}
-            disabled={isDeleting}
-            autoFocus
-            aria-label="Отказ от изтриване"
-          >
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel autoFocus disabled={isDeleting}>
             {t.buttons.cancel}
-          </Button>
-
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={onConfirm}
+          </AlertDialogCancel>
+          <AlertDialogAction
+            onClick={(e) => {
+              e.preventDefault(); // Prevent default close behavior
+              onConfirm();
+            }}
             disabled={isDeleting}
-            aria-label={`Потвърди изтриване на ${itemTitle}`}
-            className="bg-red-600 hover:bg-red-700 text-white"
+            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
           >
-            {isDeleting ? (
-              <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" aria-hidden="true" />
-                Изтриване...
-              </>
-            ) : (
-              <>{t.buttons.delete}</>
-            )}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+            {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {t.buttons.delete}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

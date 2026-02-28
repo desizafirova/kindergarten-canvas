@@ -65,11 +65,13 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     content: value,
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
+      console.log('🔍 Editor HTML:', html);
       // Sanitize HTML to prevent XSS attacks before storing in database
       const sanitizedHtml = DOMPurify.sanitize(html, {
         ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'ul', 'ol', 'li', 'a', 'h2', 'h3'],
         ALLOWED_ATTR: ['href', 'target', 'rel', 'class'],
       });
+      console.log('🧼 Sanitized HTML:', sanitizedHtml);
       onChange(sanitizedHtml);
     },
     immediatelyRender: false, // Best practice for SSR apps (2026)

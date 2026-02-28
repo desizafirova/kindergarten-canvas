@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import NewsList from '@/pages/admin/NewsList';
 import * as useNewsHook from '@/hooks/useNews';
@@ -357,8 +357,9 @@ describe('NewsList', () => {
         expect(screen.getByText('Изтриване на новина')).toBeInTheDocument();
       });
 
-      // Click confirm button in dialog
-      const confirmButton = screen.getByRole('button', { name: /Потвърди изтриване/ });
+      // Click confirm button in dialog (second "Изтрий" button - the one in AlertDialog)
+      const allDeleteButtons = screen.getAllByText('Изтрий');
+      const confirmButton = allDeleteButtons[allDeleteButtons.length - 1]; // Last one is in the dialog
       fireEvent.click(confirmButton);
 
       // Should perform optimistic update
@@ -401,8 +402,9 @@ describe('NewsList', () => {
       const deleteButtons = await screen.findAllByText('Изтрий');
       fireEvent.click(deleteButtons[0]);
 
-      // Click confirm button
-      const confirmButton = await screen.findByRole('button', { name: /Потвърди изтриване/ });
+      // Click confirm button in dialog
+      const allDeleteButtons = await screen.findAllByText('Изтрий');
+      const confirmButton = allDeleteButtons[allDeleteButtons.length - 1]; // Last one is in the dialog
       fireEvent.click(confirmButton);
 
       // Should show error toast
@@ -442,6 +444,67 @@ describe('NewsList', () => {
       // Dialog should close (title no longer visible)
       await waitFor(() => {
         expect(screen.queryByText(/Това действие не може да бъде отменено/)).not.toBeInTheDocument();
+      });
+    });
+
+    it('loading state prevents multiple delete clicks', async () => {
+      const mockRefetch = vi.fn();
+      const mockSetData = vi.fn();
+      let resolveDelete: () => void;
+      const deletePromise = new Promise<any>((resolve) => {
+        resolveDelete = () => resolve({ data: { success: true } });
+      });
+
+      vi.mocked(useNewsHook.useNews).mockReturnValue({
+        data: mockNewsItems,
+        loading: false,
+        error: null,
+        refetch: mockRefetch,
+        setData: mockSetData,
+      });
+
+      vi.mocked(api.delete).mockReturnValue(deletePromise);
+
+      render(
+        <BrowserRouter>
+          <NewsList />
+        </BrowserRouter>
+      );
+
+      // Click Delete button to open dialog
+      const deleteButtons = await screen.findAllByText('Изтрий');
+      fireEvent.click(deleteButtons[0]);
+
+      // Wait for dialog to appear
+      await waitFor(() => {
+        expect(screen.getByText('Изтриване на новина')).toBeInTheDocument();
+      });
+
+      // Get the confirm button in dialog (use alertdialog role to scope the search)
+      const dialog = screen.getByRole('alertdialog');
+      const confirmButton = within(dialog).getByRole('button', { name: /изтрий/i });
+      const cancelButton = within(dialog).getByRole('button', { name: /отказ/i });
+
+      // Click confirm button
+      fireEvent.click(confirmButton);
+
+      // While deletion is in progress, dialog buttons should be disabled
+      await waitFor(() => {
+        expect(confirmButton).toBeDisabled();
+      });
+
+      // Cancel button should also be disabled
+      expect(cancelButton).toBeDisabled();
+
+      // API should be called only once (multiple clicks prevented by disabled state)
+      expect(api.delete).toHaveBeenCalledTimes(1);
+
+      // Resolve the delete operation
+      resolveDelete!();
+
+      // Wait for operation to complete
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalled();
       });
     });
   });

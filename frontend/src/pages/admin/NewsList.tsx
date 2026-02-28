@@ -35,8 +35,7 @@ export default function NewsList() {
 
   const [activeFilter, setActiveFilter] = useState<FilterType>('ALL');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
-  const [selectedItemTitle, setSelectedItemTitle] = useState('');
+  const [newsToDelete, setNewsToDelete] = useState<{ id: number; title: string } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deletingItemId, setDeletingItemId] = useState<number | null>(null);
   const [liveAnnouncement, setLiveAnnouncement] = useState('');
@@ -57,31 +56,27 @@ export default function NewsList() {
   const handleDelete = useCallback((id: number) => {
     const item = newsItems.find((item) => item.id === id);
     if (item) {
-      setSelectedItemId(id);
-      setSelectedItemTitle(item.title);
+      setNewsToDelete({ id: item.id, title: item.title });
       setDeleteDialogOpen(true);
     }
   }, [newsItems]);
 
   // Handle delete confirmation with optimistic update
   const handleConfirmDelete = async () => {
-    if (!selectedItemId) return;
+    if (!newsToDelete) return;
 
-    const itemToDelete = newsItems.find(item => item.id === selectedItemId);
-    const itemTitle = itemToDelete?.title || '';
+    setIsDeleting(true);
+    setDeletingItemId(newsToDelete.id);
 
     try {
-      setIsDeleting(true);
-      setDeletingItemId(selectedItemId);
-
       // Optimistic update: remove item from list immediately
-      setData(prevItems => prevItems.filter(item => item.id !== selectedItemId));
+      setData(prevItems => prevItems.filter(item => item.id !== newsToDelete.id));
 
       // Close dialog
       setDeleteDialogOpen(false);
 
       // Call DELETE endpoint
-      await api.delete(`/api/admin/v1/news/${selectedItemId}`);
+      await api.delete(`/api/admin/v1/news/${newsToDelete.id}`);
 
       // Announce to screen readers
       setLiveAnnouncement(t.newsList.itemDeleted);
@@ -90,16 +85,14 @@ export default function NewsList() {
       toast.success(t.newsList.deleteSuccess);
 
       // Reset state
-      setSelectedItemId(null);
-      setSelectedItemTitle('');
+      setNewsToDelete(null);
 
       // Refetch to ensure consistency with server
       refetch();
     } catch (err) {
-      // Revert optimistic update on error
-      if (itemToDelete) {
-        setData(prevItems => [...prevItems, itemToDelete]);
-      }
+      // Revert optimistic update on error by refetching from server
+      // This restores items at their original positions
+      refetch();
       toast.error(t.newsList.deleteError);
     } finally {
       setIsDeleting(false);
@@ -107,13 +100,6 @@ export default function NewsList() {
       // Clear announcement after delay
       setTimeout(() => setLiveAnnouncement(''), 1000);
     }
-  };
-
-  // Handle delete cancellation
-  const handleCancelDelete = () => {
-    setDeleteDialogOpen(false);
-    setSelectedItemId(null);
-    setSelectedItemTitle('');
   };
 
   // Handle create button click - navigate to create page
@@ -247,11 +233,11 @@ export default function NewsList() {
 
       {/* Delete Confirmation Dialog */}
       <DeleteConfirmDialog
-        isOpen={deleteDialogOpen}
-        itemTitle={selectedItemTitle}
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        itemTitle={newsToDelete?.title || ''}
         isDeleting={isDeleting}
         onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
       />
     </div>
   );

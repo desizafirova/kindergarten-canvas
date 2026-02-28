@@ -6,6 +6,7 @@ import colorTxt from 'ansi-colors';
 import app from '@server/app';
 import config from '@config/app';
 import logger from '@utils/logger/winston/logger';
+import { initializePreviewSocket } from '@socket/preview.socket';
 
 export default async (silent: boolean) => {
     const serverHost = config.app.host;
@@ -15,6 +16,9 @@ export default async (silent: boolean) => {
     serverConnections = [];
 
     const server = createServer(app());
+
+    // Initialize Socket.io for real-time preview
+    initializePreviewSocket(server);
 
     server.listen(serverPort);
 
@@ -77,9 +81,14 @@ const onListening = (host: string, port: number, silent: boolean) => {
                 /* eslint-enable no-console */
             );
         }
+        console.log(
+            colorTxt.white(`-> WebSocket ready on ws://${host}:${port}`),
+            /* eslint-enable no-console */
+        );
     }
 
     logger.info(`Api status: Ready (listening on ${host}:${port})`);
+    logger.info(`WebSocket status: Ready (ws://${host}:${port})`);
 };
 
 const onError = (

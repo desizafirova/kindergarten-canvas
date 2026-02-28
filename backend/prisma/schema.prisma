@@ -22,6 +22,12 @@ enum NewsStatus {
   PUBLISHED // Content visible on public website
 }
 
+// TeacherStatus enum for teacher profile workflow states
+enum TeacherStatus {
+  DRAFT // Teacher profile saved but not public
+  PUBLISHED // Teacher profile visible on website
+}
+
 // User model for administrator accounts (login credentials, role)
 // Only for admin panel access - not related to public website users
 model User {
@@ -47,4 +53,23 @@ model NewsItem {
 
   @@index([status]) // Index for filtering by DRAFT/PUBLISHED status
   @@map("news_items") // PostgreSQL table name (snake_case convention)
+}
+
+// Teacher model for teacher/staff profile management (Epic 4)
+// Supports draft/publish workflow with optional photos and custom sorting
+model Teacher {
+  id           Int           @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  position     String // Bulgarian position title (e.g., "Учител", "Директор")
+  bio          String? // Optional biography/description
+  photoUrl     String? // Optional - Cloudinary URL from Story 3.3
+  status       TeacherStatus @default(DRAFT)
+  displayOrder Int? // Optional manual sorting for public list
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([status]) // Index for filtering by DRAFT/PUBLISHED status
+  @@index([status, displayOrder]) // Composite index for public sorted queries
+  @@map("teachers") // PostgreSQL table name (snake_case convention)
 }

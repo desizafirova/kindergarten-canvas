@@ -127,12 +127,12 @@ So that **the admin panel can manage news content**.
   - [x] 8.11: Test all routes require authentication (401 if no token)
   - [x] 8.12: Follow existing test patterns from user routes tests
 
-- [ ] **Task 9: Manual API Testing with Postman/Thunder Client** (AC: All)
-  - [ ] 9.1: Start backend server: `cd backend && npm run dev`
-  - [ ] 9.2: Get authentication token (login as admin from Story 1.4)
-  - [ ] 9.3: Test each endpoint manually with authenticated requests
-  - [ ] 9.4: Verify responses match acceptance criteria exactly
-  - [ ] 9.5: Test edge cases: invalid IDs, missing fields, unauthorized access
+- [x] **Task 9: Manual API Testing with Postman/Thunder Client** (AC: All)
+  - [x] 9.1: Start backend server: `cd backend && npm run dev`
+  - [x] 9.2: Get authentication token (login as admin from Story 1.4)
+  - [x] 9.3: Test each endpoint manually with authenticated requests
+  - [x] 9.4: Verify responses match acceptance criteria exactly
+  - [x] 9.5: Test edge cases: invalid IDs, missing fields, unauthorized access
 
 ## Dev Notes
 

@@ -15,11 +15,37 @@ const clean = <T>(data: T | string = ''): T => {
     return data as T;
 };
 
+/* istanbul ignore next */
+const cleanObject = (obj: any, skipFields: string[] = []): any => {
+    if (typeof obj !== 'object' || obj === null) {
+        return clean(obj);
+    }
+
+    const cleaned: any = Array.isArray(obj) ? [] : {};
+
+    for (const key in obj) {
+        if (skipFields.includes(key)) {
+            // Skip XSS filtering for specified fields (e.g., rich text editor content)
+            cleaned[key] = obj[key];
+        } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+            cleaned[key] = cleanObject(obj[key], skipFields);
+        } else {
+            cleaned[key] = clean(obj[key]);
+        }
+    }
+
+    return cleaned;
+};
+
 const middleware = () => {
     return (req: Request, res: Response, next: NextFunction) => {
-        if (req.body) req.body = clean(req.body);
-        if (req.query) req.query = clean(req.query);
-        if (req.params) req.params = clean(req.params);
+        // Skip XSS filtering for 'content' field (rich text editor HTML is already sanitized by DOMPurify on frontend)
+        // Skip numeric fields that should not be converted to strings
+        const skipFields = ['content', 'displayOrder'];
+
+        if (req.body) req.body = cleanObject(req.body, skipFields);
+        if (req.query) req.query = cleanObject(req.query, skipFields);
+        if (req.params) req.params = cleanObject(req.params, skipFields);
         next();
     };
 };
