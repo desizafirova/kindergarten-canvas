@@ -62,22 +62,22 @@ development_status:
   # Epic 3: News Content Management (Golden Path)
   epic-3: in-progress
   3-1-news-prisma-model: done
-  3-2-news-crud-api-endpoints: in-progress
+  3-2-news-crud-api-endpoints: done
   3-3-cloudinary-image-upload-service: done
   3-4-news-list-view: done
   3-5-news-creation-form-with-tiptap-editor: done
-  3-6-auto-save-functionality: review
-  3-7-preview-modal: backlog
-  3-8-publish-and-update-workflow: backlog
-  3-9-delete-confirmation-dialog: backlog
-  3-10-real-time-preview-websocket: backlog
-  3-11-public-news-display-integration: backlog
+  3-6-auto-save-functionality: done
+  3-7-preview-modal: done
+  3-8-publish-and-update-workflow: done
+  3-9-delete-confirmation-dialog: done
+  3-10-real-time-preview-websocket: done
+  3-11-public-news-display-integration: done
   epic-3-retrospective: optional
 
   # Epic 4: Teacher Profiles Management
-  epic-4: backlog
-  4-1-teacher-prisma-model: backlog
-  4-2-teacher-crud-api-endpoints: backlog
+  epic-4: in-progress
+  4-1-teacher-prisma-model: done
+  4-2-teacher-crud-api-endpoints: done
   4-3-teacher-list-and-form: backlog
   4-4-public-teacher-profiles-display: backlog
   epic-4-retrospective: optional
