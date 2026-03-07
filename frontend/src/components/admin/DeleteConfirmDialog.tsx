@@ -17,6 +17,8 @@ interface DeleteConfirmDialogProps {
   itemTitle: string;
   onConfirm: () => Promise<void>;
   isDeleting: boolean;
+  /** Override the default deletion message (defaults to deleteConfirmDialog.message i18n key) */
+  message?: string;
 }
 
 /**
@@ -36,6 +38,7 @@ export function DeleteConfirmDialog({
   itemTitle,
   onConfirm,
   isDeleting,
+  message,
 }: DeleteConfirmDialogProps) {
   const t = useTranslation();
 
@@ -45,7 +48,7 @@ export function DeleteConfirmDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>{t.deleteConfirmDialog.title}</AlertDialogTitle>
           <AlertDialogDescription>
-            {t.deleteConfirmDialog.message}
+            {message ?? t.deleteConfirmDialog.message}
             <span className="font-semibold block mt-2">{itemTitle}</span>
             <span className="text-muted-foreground text-xs block mt-2">
               {t.deleteConfirmDialog.confirmMessage}

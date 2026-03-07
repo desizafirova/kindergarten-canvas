@@ -4,7 +4,7 @@ import logger from '@utils/logger/winston/logger';
 const msgError = 'Failed to create a news item.';
 
 export default (data: object, select: object) => {
-    const result = prisma.newsItem
+    const result = prisma.news_items
         .create({ data: data as any, select })
         .then((res) => ({ success: true, data: res, error: null }))
         .catch((error: Error) => {

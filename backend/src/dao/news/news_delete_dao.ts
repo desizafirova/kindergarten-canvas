@@ -4,7 +4,7 @@ import logger from '@utils/logger/winston/logger';
 const msgError = 'Failed to delete news item.';
 
 export default (id: number) => {
-    const result = prisma.newsItem
+    const result = prisma.news_items
         .delete({ where: { id } })
         .then((res: any) => ({ success: true, data: res, error: null }))
         .catch((error: any) => {

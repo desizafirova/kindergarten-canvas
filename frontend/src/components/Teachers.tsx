@@ -1,63 +1,77 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Heart, Star, Music, Palette } from "lucide-react";
+import { Heart, Star, Music, Palette, User } from "lucide-react";
 import ScrollReveal from "./animations/ScrollReveal";
 import StaggerChildren, { itemVariants } from "./animations/StaggerChildren";
-
-import teacher1 from "@/assets/teachers/teacher-1.jpg";
-import teacher2 from "@/assets/teachers/teacher-2.jpg";
-import teacher3 from "@/assets/teachers/teacher-3.jpg";
-import teacher4 from "@/assets/teachers/teacher-4.jpg";
+import api from "@/lib/api";
 
 interface Teacher {
   id: number;
-  name: string;
-  role: string;
-  bio: string;
-  image: string;
-  icon: React.ReactNode;
-  color: string;
+  firstName: string;
+  lastName: string;
+  position: string;
+  bio: string | null;
+  photoUrl: string | null;
+  displayOrder: number | null;
 }
 
-const teachers: Teacher[] = [
-  {
-    id: 1,
-    name: "Мария Иванова",
-    role: "Главен учител",
-    bio: "С 15 години опит, Мария води нашия екип със страст и творчество. Тя вярва, че всяко дете има уникална искра, която чака да засияе!",
-    image: teacher1,
-    icon: <Star className="w-5 h-5" />,
-    color: "bg-primary",
-  },
-  {
-    id: 2,
-    name: "Георги Петров",
-    role: "STEM педагог",
-    bio: "Георги прави науката забавна и достъпна! Неговите интерактивни експерименти и изследвания на природата вдъхновяват любопитство във всеки малък учен.",
-    image: teacher2,
-    icon: <Heart className="w-5 h-5" />,
-    color: "bg-secondary",
-  },
-  {
-    id: 3,
-    name: "Елена Димитрова",
-    role: "Учител по изкуства",
-    bio: "Елена възпитава творчество чрез цветове и въображение. Нейната стая за изкуство е магическо пространство, където се раждат шедьоври всеки ден!",
-    image: teacher3,
-    icon: <Palette className="w-5 h-5" />,
-    color: "bg-accent",
-  },
-  {
-    id: 4,
-    name: "Петя Николова",
-    role: "Музика и движение",
-    bio: "С песни и танци, Петя носи радост в ученето. Нейните музикални часове са изпълнени със смях, ритъм и щастливи спомени.",
-    image: teacher4,
-    icon: <Music className="w-5 h-5" />,
-    color: "bg-mint",
-  },
-];
+// Helper function to get icon and color based on position
+const getTeacherStyle = (position: string, index: number) => {
+  const lowerPosition = position.toLowerCase();
+
+  if (lowerPosition.includes('главен') || lowerPosition.includes('директор')) {
+    return { icon: <Star className="w-5 h-5" />, color: "bg-primary" };
+  } else if (lowerPosition.includes('stem') || lowerPosition.includes('наука')) {
+    return { icon: <Heart className="w-5 h-5" />, color: "bg-secondary" };
+  } else if (lowerPosition.includes('изкуство') || lowerPosition.includes('рисуване')) {
+    return { icon: <Palette className="w-5 h-5" />, color: "bg-accent" };
+  } else if (lowerPosition.includes('музика') || lowerPosition.includes('движение')) {
+    return { icon: <Music className="w-5 h-5" />, color: "bg-mint" };
+  } else {
+    // Cycle through colors for other positions
+    const colors = ["bg-primary", "bg-secondary", "bg-accent", "bg-mint"];
+    return { icon: <User className="w-5 h-5" />, color: colors[index % colors.length] };
+  }
+};
+
+// Helper to get teacher initials for placeholder
+const getInitials = (firstName: string, lastName: string) => {
+  return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+};
 
 const Teachers = () => {
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      try {
+        setIsLoading(true);
+        setIsError(false);
+        const response = await api.get('/api/v1/public/teachers');
+
+        if (response.data.status === 'success') {
+          setTeachers(response.data.data.teachers);
+        } else {
+          setIsError(true);
+        }
+      } catch (error) {
+        console.error('Error fetching teachers:', error);
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTeachers();
+  }, []);
+
+  // Don't render the section if there are no teachers and not loading
+  if (!isLoading && !isError && teachers.length === 0) {
+    return null;
+  }
+
   return (
     <section id="teachers" className="py-20 bg-background relative overflow-hidden">
       {/* Decorative elements */}
@@ -80,57 +94,96 @@ const Teachers = () => {
           </div>
         </ScrollReveal>
 
-        <StaggerChildren className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {teachers.map((teacher) => (
-            <motion.div
-              key={teacher.id}
-              variants={itemVariants}
-              className="group"
-            >
-              <div className="relative bg-card rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                {/* Image container with overlay */}
-                <div className="relative h-64 overflow-hidden">
-                  <img
-                    src={teacher.image}
-                    alt={teacher.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
-                  
-                  {/* Role badge */}
-                  <motion.div
-                    className={`absolute top-4 right-4 ${teacher.color} text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 shadow-lg`}
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                  >
-                    {teacher.icon}
-                    <span>{teacher.role}</span>
-                  </motion.div>
-                </div>
+        {/* Loading State */}
+        {isLoading && (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            <p className="mt-4 text-muted-foreground">Зареждане на учители...</p>
+          </div>
+        )}
 
-                {/* Content */}
-                <div className="p-6 relative">
-                  {/* Decorative corner blob */}
-                  <div className={`absolute -top-6 left-6 w-12 h-12 ${teacher.color}/20 rounded-blob`} />
-                  
-                  <h3 className="text-xl font-display font-bold text-foreground mb-2 relative z-10">
-                    {teacher.name}
-                  </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {teacher.bio}
-                  </p>
+        {/* Error State */}
+        {isError && !isLoading && (
+          <div className="text-center py-12 bg-red-50 rounded-lg border border-red-200">
+            <p className="text-red-600">Грешка при зареждане на учителите. Моля, опитайте по-късно.</p>
+          </div>
+        )}
 
-                  {/* Hover effect line */}
-                  <motion.div
-                    className={`h-1 ${teacher.color} rounded-full mt-4 origin-left`}
-                    initial={{ scaleX: 0 }}
-                    whileInView={{ scaleX: 1 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                  />
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </StaggerChildren>
+        {/* Teachers Grid */}
+        {!isLoading && !isError && teachers.length > 0 && (
+          <StaggerChildren className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {teachers.map((teacher, index) => {
+              const fullName = `${teacher.firstName} ${teacher.lastName}`;
+              const { icon, color } = getTeacherStyle(teacher.position, index);
+
+              return (
+                <motion.div
+                  key={teacher.id}
+                  variants={itemVariants}
+                  className="group"
+                >
+                  <div className="relative bg-card rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    {/* Image container with overlay */}
+                    <div className="relative h-64 overflow-hidden bg-gray-100">
+                      {teacher.photoUrl ? (
+                        <img
+                          src={teacher.photoUrl}
+                          alt={`${fullName} - ${teacher.position}`}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300">
+                          <div className="text-center">
+                            <div className="text-6xl font-bold text-gray-400 mb-2">
+                              {getInitials(teacher.firstName, teacher.lastName)}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
+
+                      {/* Role badge */}
+                      {teacher.position && (
+                        <motion.div
+                          className={`absolute top-4 right-4 ${color} text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 shadow-lg`}
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                        >
+                          {icon}
+                          <span>{teacher.position}</span>
+                        </motion.div>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-6 relative">
+                      {/* Decorative corner blob */}
+                      <div className={`absolute -top-6 left-6 w-12 h-12 ${color}/20 rounded-blob`} />
+
+                      <h3 className="text-xl font-display font-bold text-foreground mb-2 relative z-10">
+                        {fullName}
+                      </h3>
+                      {teacher.bio && (
+                        <div
+                          className="text-muted-foreground text-sm leading-relaxed prose prose-sm max-w-none"
+                          dangerouslySetInnerHTML={{ __html: teacher.bio }}
+                        />
+                      )}
+
+                      {/* Hover effect line */}
+                      <motion.div
+                        className={`h-1 ${color} rounded-full mt-4 origin-left`}
+                        initial={{ scaleX: 0 }}
+                        whileInView={{ scaleX: 1 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </StaggerChildren>
+        )}
 
         {/* Fun fact callout */}
         <ScrollReveal delay={0.4}>

@@ -61,7 +61,10 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       Heading.configure({
         levels: [2, 3],
       }),
-    ],
+    ].filter((ext, index, self) => {
+      // Remove duplicate extensions by name
+      return index === self.findIndex((e) => e.name === ext.name);
+    }),
     content: value,
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();

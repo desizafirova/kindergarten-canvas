@@ -4,7 +4,7 @@ import logger from '@utils/logger/winston/logger';
 const msgError = 'Failed to update teacher.';
 
 export default (id: number, data: object, select: object) => {
-    const result = prisma.teacher
+    const result = prisma.teachers
         .update({ where: { id }, data: data as any, select })
         .then((res) => ({ success: true, data: res, error: null }))
         .catch((error: Error) => {

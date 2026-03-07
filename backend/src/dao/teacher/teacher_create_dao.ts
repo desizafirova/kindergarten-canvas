@@ -4,7 +4,7 @@ import logger from '@utils/logger/winston/logger';
 const msgError = 'Failed to create a teacher.';
 
 export default (data: object, select: object) => {
-    const result = prisma.teacher
+    const result = prisma.teachers
         .create({ data: data as any, select })
         .then((res) => ({ success: true, data: res, error: null }))
         .catch((error: Error) => {

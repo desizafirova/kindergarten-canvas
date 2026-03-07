@@ -4,7 +4,7 @@ import logger from '@utils/logger/winston/logger';
 const msgError = 'Failed to get teacher.';
 
 export default (id: number, select: object) => {
-    const result = prisma.teacher
+    const result = prisma.teachers
         .findUnique({ where: { id }, select })
         .then((res: any) => {
             return { success: true, data: res, error: null };

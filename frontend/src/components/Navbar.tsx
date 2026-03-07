@@ -31,6 +31,7 @@ const Navbar = () => {
     { name: 'Прием', href: '/admission', isRoute: true },
     { name: 'Кариери', href: '/careers', isRoute: true },
     { name: 'Новини', href: '/news', isRoute: true },
+    { name: 'Учители', href: '/teachers', isRoute: true },
     {
       name: 'Контакти',
       href: isHomePage ? '#contact' : '/#contact',

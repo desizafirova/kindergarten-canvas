@@ -4,7 +4,7 @@ import logger from '@utils/logger/winston/logger';
 const msgError = 'Failed to get all news items.';
 
 export default (where: object, select: object, orderBy: object) => {
-    const result = prisma.newsItem
+    const result = prisma.news_items
         .findMany({ where, select, orderBy })
         .then((res: any) => {
             return { success: true, data: res, error: null };

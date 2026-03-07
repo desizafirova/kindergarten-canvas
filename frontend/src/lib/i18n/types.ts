@@ -193,6 +193,164 @@ export interface Translations {
     backToList: string;
     notFound: string;
   };
+  publicTeachers: {
+    sectionTitle: string;
+    emptyState: string;
+    loading: string;
+    error: string;
+  };
+  teachersList: {
+    title: string;
+    subtitle: string;
+    emptyState: string;
+    emptyFilteredState: string;
+    createButton: string;
+    filterAll: string;
+    filterDrafts: string;
+    filterPublished: string;
+    deleteSuccess: string;
+    deleteError: string;
+    loadError: string;
+    retryButton: string;
+    itemDeleted: string;
+  };
+  teacherForm: {
+    title: string;
+    createTitle: string;
+    editTitle: string;
+    firstNameLabel: string;
+    firstNamePlaceholder: string;
+    lastNameLabel: string;
+    lastNamePlaceholder: string;
+    positionLabel: string;
+    positionPlaceholder: string;
+    bioLabel: string;
+    bioPlaceholder: string;
+    photoLabel: string;
+    saveDraft: string;
+    publish: string;
+    update: string;
+    errors: {
+      firstNameRequired: string;
+      lastNameRequired: string;
+      positionRequired: string;
+      saveFailed: string;
+      publishFailed: string;
+      updateFailed: string;
+    };
+    success: {
+      saved: string;
+      published: string;
+      updated: string;
+    };
+    breadcrumb: {
+      teachers: string;
+      create: string;
+      edit: string;
+    };
+  };
+  datePicker: {
+    placeholder: string;
+    requiredError: string;
+    endBeforeStartError: string;
+  };
+  eventsList: {
+    title: string;
+    subtitle: string;
+    emptyState: string;
+    emptyFilteredState: string;
+    createButton: string;
+    filterAll: string;
+    filterUpcoming: string;
+    filterPast: string;
+    deleteSuccess: string;
+    deleteError: string;
+    deleteConfirmMessage: string;
+    loadError: string;
+    retryButton: string;
+    itemDeleted: string;
+  };
+  eventForm: {
+    title: string;
+    createTitle: string;
+    editTitle: string;
+    titleLabel: string;
+    titlePlaceholder: string;
+    eventDateLabel: string;
+    eventEndDateLabel: string;
+    locationLabel: string;
+    locationPlaceholder: string;
+    descriptionLabel: string;
+    isImportantLabel: string;
+    imageLabel: string;
+    saveDraft: string;
+    publish: string;
+    update: string;
+    errors: {
+      titleRequired: string;
+      eventDateRequired: string;
+      endBeforeStart: string;
+      saveFailed: string;
+      publishFailed: string;
+      updateFailed: string;
+    };
+    success: {
+      saved: string;
+      published: string;
+      updated: string;
+    };
+    breadcrumb: {
+      events: string;
+      create: string;
+      edit: string;
+    };
+  };
+  deadlinesList: {
+    title: string;
+    subtitle: string;
+    emptyState: string;
+    emptyFilteredState: string;
+    createButton: string;
+    filterAll: string;
+    filterActive: string;
+    filterExpired: string;
+    deleteSuccess: string;
+    deleteError: string;
+    loadError: string;
+    retryButton: string;
+    itemDeleted: string;
+    deleteConfirmMessage: string;
+  };
+  deadlineForm: {
+    title: string;
+    createTitle: string;
+    editTitle: string;
+    titleLabel: string;
+    titlePlaceholder: string;
+    deadlineDateLabel: string;
+    descriptionLabel: string;
+    isUrgentLabel: string;
+    saveDraft: string;
+    publish: string;
+    update: string;
+    errors: {
+      titleRequired: string;
+      deadlineDateRequired: string;
+      saveFailed: string;
+      publishFailed: string;
+      updateFailed: string;
+    };
+    success: {
+      saved: string;
+      published: string;
+      updated: string;
+    };
+    breadcrumb: {
+      deadlines: string;
+      create: string;
+      edit: string;
+    };
+  };
 }
 
 /**

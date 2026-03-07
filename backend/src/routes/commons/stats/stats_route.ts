@@ -21,8 +21,8 @@ router.get('/content-counts', auth('jwt-user'), async (req: Request, res: Respon
     try {
         // Query real news counts from database (Story 3.1)
         const [newsDraftCount, newsPublishedCount] = await Promise.all([
-            prisma.newsItem.count({ where: { status: NewsStatus.DRAFT } }),
-            prisma.newsItem.count({ where: { status: NewsStatus.PUBLISHED } }),
+            prisma.news_items.count({ where: { status: NewsStatus.DRAFT } }),
+            prisma.news_items.count({ where: { status: NewsStatus.PUBLISHED } }),
         ]);
 
         // Mock data for other content types - will be updated in future stories

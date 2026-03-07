@@ -78,18 +78,18 @@ development_status:
   epic-4: in-progress
   4-1-teacher-prisma-model: done
   4-2-teacher-crud-api-endpoints: done
-  4-3-teacher-list-and-form: backlog
-  4-4-public-teacher-profiles-display: backlog
+  4-3-teacher-list-and-form: done
+  4-4-public-teacher-profiles-display: done
   epic-4-retrospective: optional
 
   # Epic 5: Events & Deadlines Management
-  epic-5: backlog
-  5-1-event-and-deadline-prisma-models: backlog
-  5-2-events-crud-api-endpoints: backlog
-  5-3-deadlines-crud-api-endpoints: backlog
-  5-4-date-picker-component-with-bulgarian-locale: backlog
-  5-5-events-list-and-form: backlog
-  5-6-deadlines-list-and-form: backlog
+  epic-5: in-progress
+  5-1-event-and-deadline-prisma-models: done
+  5-2-events-crud-api-endpoints: done
+  5-3-deadlines-crud-api-endpoints: done
+  5-4-date-picker-component-with-bulgarian-locale: done
+  5-5-events-list-and-form: done
+  5-6-deadlines-list-and-form: done
   5-7-public-events-and-deadlines-display: backlog
   epic-5-retrospective: optional
 

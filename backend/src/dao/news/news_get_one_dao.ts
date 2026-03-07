@@ -4,7 +4,7 @@ import logger from '@utils/logger/winston/logger';
 const msgError = 'Failed to get news item.';
 
 export default (id: number, select: object) => {
-    const result = prisma.newsItem
+    const result = prisma.news_items
         .findUnique({ where: { id }, select })
         .then((res: any) => {
             return { success: true, data: res, error: null };

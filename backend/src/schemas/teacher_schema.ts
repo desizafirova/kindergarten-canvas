@@ -18,7 +18,7 @@ export const createTeacher = z.object({
             })
             .min(1, 'Длъжността е задължителна'),
         bio: z.string().optional().nullable(),
-        photoUrl: z.string().url().optional().nullable(),
+        photoUrl: z.string().url().optional().nullable().or(z.literal('')).transform(val => val === '' ? null : val),
         status: z.enum(['DRAFT', 'PUBLISHED']).optional(),
         displayOrder: z.number().optional().nullable(),
     }),
@@ -33,7 +33,7 @@ export const updateTeacher = z.object({
         lastName: z.string().min(1).optional(),
         position: z.string().min(1).optional(),
         bio: z.string().optional().nullable(),
-        photoUrl: z.string().url().optional().nullable(),
+        photoUrl: z.string().url().optional().nullable().or(z.literal('')).transform(val => val === '' ? null : val),
         status: z.enum(['DRAFT', 'PUBLISHED']).optional(),
         displayOrder: z.number().optional().nullable(),
     }),

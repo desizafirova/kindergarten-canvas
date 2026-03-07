@@ -4,7 +4,7 @@ import logger from '@utils/logger/winston/logger';
 const msgError = 'Failed to get all teachers.';
 
 export default (where: object, select: object, orderBy: object) => {
-    const result = prisma.teacher
+    const result = prisma.teachers
         .findMany({ where, select, orderBy })
         .then((res: any) => {
             return { success: true, data: res, error: null };

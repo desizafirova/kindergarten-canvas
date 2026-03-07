@@ -10,7 +10,7 @@ export const getPublishedNews = async (req: Request, res: Response) => {
     try {
         const startTime = Date.now();
 
-        const publishedNews = await prisma.newsItem.findMany({
+        const publishedNews = await prisma.news_items.findMany({
             where: {
                 status: 'PUBLISHED',
                 publishedAt: {
@@ -69,7 +69,7 @@ export const getPublishedNewsById = async (req: Request, res: Response) => {
             });
         }
 
-        const newsItem = await prisma.newsItem.findUnique({
+        const newsItem = await prisma.news_items.findUnique({
             where: {
                 id: newsId,
             },

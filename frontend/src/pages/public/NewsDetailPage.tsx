@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import { bg } from 'date-fns/locale';
-import axios from 'axios';
+import api from '@/lib/api';
 import DOMPurify from 'dompurify';
 import { useTranslation } from '@/lib/i18n';
 import { ArrowLeft } from 'lucide-react';
@@ -38,7 +38,7 @@ export function NewsDetailPage() {
       setNotFound(false);
 
       try {
-        const response = await axios.get(`/api/v1/public/news/${id}`, {
+        const response = await api.get(`/api/v1/public/news/${id}`, {
           signal: abortController.signal,
         });
 
@@ -49,7 +49,7 @@ export function NewsDetailPage() {
         }
       } catch (error: any) {
         // Ignore abort errors
-        if (axios.isCancel(error)) {
+        if (error.name === 'CanceledError' || error.code === 'ERR_CANCELED') {
           return;
         }
 
@@ -78,7 +78,7 @@ export function NewsDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="py-12">
         <div className="container mx-auto px-4 max-w-4xl">
           <p className="text-gray-600">{t.publicNews.loading}</p>
         </div>
@@ -88,7 +88,7 @@ export function NewsDetailPage() {
 
   if (notFound) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="py-12">
         <div className="container mx-auto px-4 max-w-4xl">
           <p className="text-red-600 mb-4">{t.publicNews.notFound}</p>
           <button
@@ -105,7 +105,7 @@ export function NewsDetailPage() {
 
   if (isError) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="py-12">
         <div className="container mx-auto px-4 max-w-4xl">
           <p className="text-red-600 mb-4">{t.publicNews.error}</p>
           <button
@@ -125,7 +125,7 @@ export function NewsDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="py-12">
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Back button */}
         <button

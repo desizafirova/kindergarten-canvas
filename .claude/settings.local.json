@@ -12,7 +12,15 @@
       "Bash(npm install:*)",
       "Bash(ls:*)",
       "Bash(npm run build:*)",
-      "Bash(npm test:*)"
+      "Bash(npm test:*)",
+      "Bash(npx prisma db seed:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(npx prisma generate:*)",
+      "Bash(tasklist:*)",
+      "Bash(npx prisma migrate:*)",
+      "Bash(start npx prisma studio)",
+      "Bash(timeout /t 3:*)"
     ]
   },
   "mcpServers": {

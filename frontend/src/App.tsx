@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { AdminLayout } from "@/components/layout/AdminLayout";
+import { PublicLayout } from "@/components/layout/PublicLayout";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
 import Groups from "./pages/Groups";
@@ -22,6 +23,16 @@ import { NewsCreate } from "./pages/admin/NewsCreate";
 import { NewsEdit } from "./pages/admin/NewsEdit";
 import { NewsListPage } from "./pages/public/NewsListPage";
 import { NewsDetailPage } from "./pages/public/NewsDetailPage";
+import { TeachersPage } from "./pages/public/TeachersPage";
+import TeachersList from "./pages/admin/TeachersList";
+import TeacherCreate from "./pages/admin/TeacherCreate";
+import TeacherEdit from "./pages/admin/TeacherEdit";
+import EventsList from "./pages/admin/EventsList";
+import EventCreate from "./pages/admin/EventCreate";
+import EventEdit from "./pages/admin/EventEdit";
+import DeadlinesList from "./pages/admin/DeadlinesList";
+import DeadlineCreate from "./pages/admin/DeadlineCreate";
+import DeadlineEdit from "./pages/admin/DeadlineEdit";
 
 const queryClient = new QueryClient();
 
@@ -39,8 +50,9 @@ const App = () => (
             <Route path="/admission" element={<Admission />} />
             <Route path="/daily-schedule" element={<DailySchedule />} />
             <Route path="/careers" element={<Careers />} />
-            <Route path="/news" element={<ErrorBoundary><NewsListPage /></ErrorBoundary>} />
-            <Route path="/news/:id" element={<ErrorBoundary><NewsDetailPage /></ErrorBoundary>} />
+            <Route path="/news" element={<ErrorBoundary><PublicLayout><NewsListPage /></PublicLayout></ErrorBoundary>} />
+            <Route path="/news/:id" element={<ErrorBoundary><PublicLayout><NewsDetailPage /></PublicLayout></ErrorBoundary>} />
+            <Route path="/teachers" element={<ErrorBoundary><PublicLayout><TeachersPage /></PublicLayout></ErrorBoundary>} />
             <Route path="/menu" element={<WeeklyMenu />} />
             <Route path="/documents" element={<Documents />} />
 
@@ -82,6 +94,114 @@ const App = () => (
                 <ProtectedRoute>
                   <AdminLayout>
                     <NewsEdit />
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/teachers"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <ErrorBoundary>
+                      <TeachersList />
+                    </ErrorBoundary>
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/teachers/create"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <ErrorBoundary>
+                      <TeacherCreate />
+                    </ErrorBoundary>
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/teachers/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <ErrorBoundary>
+                      <TeacherEdit />
+                    </ErrorBoundary>
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/events"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <ErrorBoundary>
+                      <EventsList />
+                    </ErrorBoundary>
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/events/create"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <ErrorBoundary>
+                      <EventCreate />
+                    </ErrorBoundary>
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/events/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <ErrorBoundary>
+                      <EventEdit />
+                    </ErrorBoundary>
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/deadlines"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <ErrorBoundary>
+                      <DeadlinesList />
+                    </ErrorBoundary>
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/deadlines/create"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <ErrorBoundary>
+                      <DeadlineCreate />
+                    </ErrorBoundary>
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/deadlines/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <ErrorBoundary>
+                      <DeadlineEdit />
+                    </ErrorBoundary>
                   </AdminLayout>
                 </ProtectedRoute>
               }

@@ -39,9 +39,9 @@ const cleanObject = (obj: any, skipFields: string[] = []): any => {
 
 const middleware = () => {
     return (req: Request, res: Response, next: NextFunction) => {
-        // Skip XSS filtering for 'content' field (rich text editor HTML is already sanitized by DOMPurify on frontend)
-        // Skip numeric fields that should not be converted to strings
-        const skipFields = ['content', 'displayOrder'];
+        // Skip XSS filtering for 'content', 'bio', and 'description' fields (rich text editor HTML is already sanitized by DOMPurify on frontend)
+        // Skip numeric and boolean fields that should not be converted to strings
+        const skipFields = ['content', 'bio', 'description', 'displayOrder', 'isImportant', 'isUrgent'];
 
         if (req.body) req.body = cleanObject(req.body, skipFields);
         if (req.query) req.query = cleanObject(req.query, skipFields);

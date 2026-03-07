@@ -4,7 +4,7 @@ import logger from '@utils/logger/winston/logger';
 const msgError = 'Failed to delete teacher.';
 
 export default (id: number) => {
-    const result = prisma.teacher
+    const result = prisma.teachers
         .delete({ where: { id } })
         .then((res: any) => ({ success: true, data: res, error: null }))
         .catch((error: any) => {

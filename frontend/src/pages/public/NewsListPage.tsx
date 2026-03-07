@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { bg } from 'date-fns/locale';
-import axios from 'axios';
+import api from '@/lib/api';
 import { useTranslation } from '@/lib/i18n';
 
 interface NewsItem {
@@ -28,7 +28,7 @@ export function NewsListPage() {
       setIsError(false);
 
       try {
-        const response = await axios.get('/api/v1/public/news', {
+        const response = await api.get('/api/v1/public/news', {
           signal: abortController.signal,
         });
 
@@ -39,7 +39,7 @@ export function NewsListPage() {
         }
       } catch (error: any) {
         // Ignore abort errors
-        if (axios.isCancel(error)) {
+        if (error.name === 'CanceledError' || error.code === 'ERR_CANCELED') {
           return;
         }
 
@@ -78,7 +78,7 @@ export function NewsListPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="py-12">
         <div className="container mx-auto px-4">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">
             {t.publicNews.sectionTitle}
@@ -91,7 +91,7 @@ export function NewsListPage() {
 
   if (isError) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="py-12">
         <div className="container mx-auto px-4">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">
             {t.publicNews.sectionTitle}
@@ -104,7 +104,7 @@ export function NewsListPage() {
 
   if (newsItems.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="py-12">
         <div className="container mx-auto px-4">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">
             {t.publicNews.sectionTitle}
@@ -116,7 +116,7 @@ export function NewsListPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="py-12">
       <div className="container mx-auto px-4">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">
           {t.publicNews.sectionTitle}

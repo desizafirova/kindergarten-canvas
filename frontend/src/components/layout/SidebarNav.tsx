@@ -25,11 +25,11 @@ interface NavItem {
 const navigationItems: NavItem[] = [
   { path: '/admin/dashboard', icon: LayoutDashboard, labelKey: 'dashboard' },
   { path: '/admin/news', icon: Newspaper, labelKey: 'news' },
+  { path: '/admin/teachers', icon: Users, labelKey: 'teachers' },
   { path: '/admin/careers', icon: Briefcase, labelKey: 'careers' },
   { path: '/admin/events', icon: Calendar, labelKey: 'events' },
   { path: '/admin/deadlines', icon: Clock, labelKey: 'deadlines' },
   { path: '/admin/gallery', icon: Image, labelKey: 'gallery' },
-  { path: '/admin/teachers', icon: Users, labelKey: 'teachers' },
 ];
 
 interface SidebarNavProps {

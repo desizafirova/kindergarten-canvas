@@ -4,7 +4,7 @@ import logger from '@utils/logger/winston/logger';
 const msgError = 'Failed to update news item.';
 
 export default (id: number, data: object, select: object) => {
-    const result = prisma.newsItem
+    const result = prisma.news_items
         .update({ where: { id }, data: data as any, select })
         .then((res) => ({ success: true, data: res, error: null }))
         .catch((error: Error) => {
