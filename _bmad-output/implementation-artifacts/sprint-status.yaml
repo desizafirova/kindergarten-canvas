@@ -90,36 +90,36 @@ development_status:
   5-4-date-picker-component-with-bulgarian-locale: done
   5-5-events-list-and-form: done
   5-6-deadlines-list-and-form: done
-  5-7-public-events-and-deadlines-display: backlog
+  5-7-public-events-and-deadlines-display: done
   epic-5-retrospective: optional
 
   # Epic 6: Job Postings & Applications
-  epic-6: backlog
-  6-1-job-prisma-model: backlog
-  6-2-jobs-crud-api-endpoints: backlog
-  6-3-jobs-list-and-form-in-admin: backlog
-  6-4-public-job-postings-display: backlog
-  6-5-job-application-form: backlog
-  6-6-cv-upload-and-validation: backlog
-  6-7-application-email-to-admin-with-cv: backlog
-  6-8-confirmation-email-to-applicant: backlog
+  epic-6: in-progress
+  6-1-job-prisma-model: done
+  6-2-jobs-crud-api-endpoints: done
+  6-3-jobs-list-and-form-in-admin: done
+  6-4-public-job-postings-display: done
+  6-5-job-application-form: done
+  6-6-cv-upload-and-validation: done
+  6-7-application-email-to-admin-with-cv: done
+  6-8-confirmation-email-to-applicant: done
   epic-6-retrospective: optional
 
   # Epic 7: Photo Gallery Management
-  epic-7: backlog
-  7-1-gallery-prisma-model: backlog
-  7-2-gallery-crud-api-endpoints: backlog
-  7-3-multi-image-upload-for-gallery: backlog
-  7-4-gallery-list-and-form: backlog
-  7-5-public-gallery-display: backlog
+  epic-7: in-progress
+  7-1-gallery-prisma-model: done
+  7-2-gallery-crud-api-endpoints: done
+  7-3-multi-image-upload-for-gallery: done
+  7-4-gallery-list-and-form: done
+  7-5-public-gallery-display: done
   epic-7-retrospective: optional
 
   # Epic 8: Email Notification System
-  epic-8: backlog
-  8-1-email-subscriber-model: backlog
-  8-2-parent-subscription-management-api: backlog
-  8-3-aws-ses-email-service-integration: backlog
-  8-4-publish-trigger-notifications: backlog
+  epic-8: in-progress
+  8-1-email-subscriber-model: done
+  8-2-parent-subscription-management-api: done
+  8-3-aws-ses-email-service-integration: done
+  8-4-publish-trigger-notifications: done
   epic-8-retrospective: optional
 
   # Epic 9: Public Website API Integration
@@ -146,3 +146,9 @@ development_status:
 # - msw-api-testing: Set up MSW (Mock Service Worker) for comprehensive API integration
 #   tests. Currently NewsCreate tests cover UI behavior but API calls, toasts, and
 #   navigation are mocked at component level. (Identified during Story 3.5 code review)
+#
+# - prisma-generate-eperm-windows: On Windows, `npx prisma generate` may emit an EPERM
+#   error when unlinking the native DLL if another Node.js process holds it open.
+#   The TypeScript/JS client files are fully updated and types are available, but this
+#   could cause CI/CD failures if not accounted for. Consider adding a retry or a
+#   process-kill step before generate in the CI pipeline. (Identified during Story 6.1)

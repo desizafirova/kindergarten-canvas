@@ -24,6 +24,12 @@ import { NewsEdit } from "./pages/admin/NewsEdit";
 import { NewsListPage } from "./pages/public/NewsListPage";
 import { NewsDetailPage } from "./pages/public/NewsDetailPage";
 import { TeachersPage } from "./pages/public/TeachersPage";
+import { EventsPage } from "./pages/public/EventsPage";
+import { DeadlinesPage } from "./pages/public/DeadlinesPage";
+import { JobsPage } from "./pages/public/JobsPage";
+import { JobDetailPage } from "./pages/public/JobDetailPage";
+import { GalleriesPage } from "./pages/public/GalleriesPage";
+import { GalleryDetailPage } from "./pages/public/GalleryDetailPage";
 import TeachersList from "./pages/admin/TeachersList";
 import TeacherCreate from "./pages/admin/TeacherCreate";
 import TeacherEdit from "./pages/admin/TeacherEdit";
@@ -33,6 +39,12 @@ import EventEdit from "./pages/admin/EventEdit";
 import DeadlinesList from "./pages/admin/DeadlinesList";
 import DeadlineCreate from "./pages/admin/DeadlineCreate";
 import DeadlineEdit from "./pages/admin/DeadlineEdit";
+import JobsList from "./pages/admin/JobsList";
+import JobCreate from "./pages/admin/JobCreate";
+import JobEdit from "./pages/admin/JobEdit";
+import GalleriesList from "./pages/admin/GalleriesList";
+import GalleryCreate from "./pages/admin/GalleryCreate";
+import GalleryEdit from "./pages/admin/GalleryEdit";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +65,12 @@ const App = () => (
             <Route path="/news" element={<ErrorBoundary><PublicLayout><NewsListPage /></PublicLayout></ErrorBoundary>} />
             <Route path="/news/:id" element={<ErrorBoundary><PublicLayout><NewsDetailPage /></PublicLayout></ErrorBoundary>} />
             <Route path="/teachers" element={<ErrorBoundary><PublicLayout><TeachersPage /></PublicLayout></ErrorBoundary>} />
+            <Route path="/events" element={<ErrorBoundary><PublicLayout><EventsPage /></PublicLayout></ErrorBoundary>} />
+            <Route path="/deadlines" element={<ErrorBoundary><PublicLayout><DeadlinesPage /></PublicLayout></ErrorBoundary>} />
+            <Route path="/jobs" element={<ErrorBoundary><PublicLayout><JobsPage /></PublicLayout></ErrorBoundary>} />
+            <Route path="/jobs/:id" element={<ErrorBoundary><PublicLayout><JobDetailPage /></PublicLayout></ErrorBoundary>} />
+            <Route path="/galleries" element={<ErrorBoundary><PublicLayout><GalleriesPage /></PublicLayout></ErrorBoundary>} />
+            <Route path="/galleries/:id" element={<ErrorBoundary><PublicLayout><GalleryDetailPage /></PublicLayout></ErrorBoundary>} />
             <Route path="/menu" element={<WeeklyMenu />} />
             <Route path="/documents" element={<Documents />} />
 
@@ -201,6 +219,78 @@ const App = () => (
                   <AdminLayout>
                     <ErrorBoundary>
                       <DeadlineEdit />
+                    </ErrorBoundary>
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/jobs"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <ErrorBoundary>
+                      <JobsList />
+                    </ErrorBoundary>
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/jobs/create"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <ErrorBoundary>
+                      <JobCreate />
+                    </ErrorBoundary>
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/jobs/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <ErrorBoundary>
+                      <JobEdit />
+                    </ErrorBoundary>
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/galleries"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <ErrorBoundary>
+                      <GalleriesList />
+                    </ErrorBoundary>
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/galleries/create"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <ErrorBoundary>
+                      <GalleryCreate />
+                    </ErrorBoundary>
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/galleries/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <ErrorBoundary>
+                      <GalleryEdit />
                     </ErrorBoundary>
                   </AdminLayout>
                 </ProtectedRoute>

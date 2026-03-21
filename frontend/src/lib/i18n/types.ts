@@ -199,6 +199,30 @@ export interface Translations {
     loading: string;
     error: string;
   };
+  publicEvents: {
+    sectionTitle: string;
+    emptyState: string;
+    loading: string;
+    error: string;
+  };
+  publicDeadlines: {
+    sectionTitle: string;
+    emptyState: string;
+    loading: string;
+    error: string;
+  };
+  publicJobs: {
+    sectionTitle: string;
+    emptyState: string;
+    loading: string;
+    error: string;
+    applyButton: string;
+    deadlineLabel: string;
+    deadlineExpired: string;
+    requirementsTitle: string;
+    notFound: string;
+    backToList: string;
+  };
   teachersList: {
     title: string;
     subtitle: string;
@@ -350,6 +374,142 @@ export interface Translations {
       create: string;
       edit: string;
     };
+  };
+  jobsList: {
+    title: string;
+    subtitle: string;
+    emptyState: string;
+    emptyFilteredState: string;
+    createButton: string;
+    filterAll: string;
+    filterActive: string;
+    filterClosed: string;
+    deleteSuccess: string;
+    deleteError: string;
+    deleteConfirmMessage: string;
+    loadError: string;
+    retryButton: string;
+    itemDeleted: string;
+    applicationDeadlinePrefix: string;
+  };
+  jobForm: {
+    title: string;
+    createTitle: string;
+    editTitle: string;
+    titleLabel: string;
+    titlePlaceholder: string;
+    descriptionLabel: string;
+    requirementsLabel: string;
+    contactEmailLabel: string;
+    contactEmailPlaceholder: string;
+    applicationDeadlineLabel: string;
+    isActiveLabel: string;
+    saveDraft: string;
+    publish: string;
+    update: string;
+    errors: {
+      titleRequired: string;
+      descriptionRequired: string;
+      contactEmailRequired: string;
+      contactEmailInvalid: string;
+      saveFailed: string;
+      publishFailed: string;
+      updateFailed: string;
+    };
+    success: {
+      saved: string;
+      published: string;
+      updated: string;
+    };
+    breadcrumb: {
+      careers: string;
+      create: string;
+      edit: string;
+    };
+  };
+  galleryList: {
+    title: string;
+    subtitle: string;
+    emptyState: string;
+    createButton: string;
+    filterAll: string;
+    filterDrafts: string;
+    filterPublished: string;
+    deleteSuccess: string;
+    deleteError: string;
+    deleteConfirmMessage: string;
+    loadError: string;
+    retryButton: string;
+    itemDeleted: string;
+    imageCountSuffix: string;
+    listAriaLabel: string;
+  };
+  galleryForm: {
+    title: string;
+    createTitle: string;
+    editTitle: string;
+    titleLabel: string;
+    titlePlaceholder: string;
+    descriptionLabel: string;
+    saveDraft: string;
+    publish: string;
+    update: string;
+    noImagesError: string;
+    errors: {
+      titleRequired: string;
+      saveFailed: string;
+      publishFailed: string;
+      updateFailed: string;
+    };
+    success: {
+      saved: string;
+      published: string;
+      updated: string;
+    };
+    breadcrumb: {
+      gallery: string;
+      create: string;
+      edit: string;
+    };
+  };
+  applicationForm: {
+    title: string;
+    nameLabel: string;
+    namePlaceholder: string;
+    emailLabel: string;
+    emailPlaceholder: string;
+    phoneLabel: string;
+    phonePlaceholder: string;
+    coverLetterLabel: string;
+    coverLetterPlaceholder: string;
+    cvLabel: string;
+    cvHelp: string;
+    cvDropZoneText: string;
+    cvRemoveButton: string;
+    cvInvalidType: string;
+    cvFileTooLarge: string;
+    submitButton: string;
+    submittingButton: string;
+    successMessage: string;
+    successSubtext: string;
+    backToJobsLink: string;
+    rateLimitError: string;
+    genericError: string;
+    closeButton: string;
+  };
+  publicGallery: {
+    sectionTitle: string;
+    emptyState: string;
+    loading: string;
+    error: string;
+    imageCount: string;
+    notFound: string;
+    backToList: string;
+    lightboxClose: string;
+    lightboxPrev: string;
+    lightboxNext: string;
+    detailLoading: string;
+    detailError: string;
   };
 }
 

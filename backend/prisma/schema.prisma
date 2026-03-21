@@ -69,6 +69,64 @@ enum DeadlineStatus {
   PUBLISHED
 }
 
+enum JobStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model Job {
+  id                  Int        @id @default(autoincrement())
+  title               String
+  description         String
+  requirements        String?
+  contactEmail        String     @map("contact_email")
+  applicationDeadline DateTime?  @map("application_deadline") @db.Timestamptz(6)
+  isActive            Boolean    @default(true) @map("is_active")
+  status              JobStatus  @default(DRAFT)
+  publishedAt         DateTime?  @map("published_at") @db.Timestamptz(6)
+  createdAt           DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime   @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([status, createdAt])
+  @@index([isActive, status])
+  @@map("jobs")
+}
+
+enum GalleryStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model Gallery {
+  id            Int            @id @default(autoincrement())
+  title         String
+  description   String?
+  // Denormalized cover URL — must be updated by application layer when images are added/removed (Story 7.3)
+  coverImageUrl String?        @map("cover_image_url")
+  status        GalleryStatus  @default(DRAFT)
+  publishedAt   DateTime?      @map("published_at") @db.Timestamptz(6)
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  images        GalleryImage[]
+
+  @@index([status, createdAt])
+  @@map("galleries")
+}
+
+model GalleryImage {
+  id           Int      @id @default(autoincrement())
+  galleryId    Int      @map("gallery_id")
+  gallery      Gallery  @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  imageUrl     String   @map("image_url")
+  thumbnailUrl String?  @map("thumbnail_url")
+  altText      String?  @map("alt_text")
+  displayOrder Int      @default(0) @map("display_order")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([galleryId, displayOrder])
+  @@map("gallery_images")
+}
+
 model Event {
   id           Int         @id @default(autoincrement())
   title        String
@@ -102,4 +160,17 @@ model Deadline {
   @@index([status, deadlineDate])
   @@index([status, createdAt])
   @@map("deadlines")
+}
+
+model EmailSubscriber {
+  id                Int       @id @default(autoincrement())
+  email             String    @unique
+  isActive          Boolean   @default(true) @map("is_active")
+  subscriptionTypes String[]  @map("subscription_types")
+  unsubscribeToken  String    @unique @map("unsubscribe_token")
+  subscribedAt      DateTime  @default(now()) @map("subscribed_at") @db.Timestamptz(6)
+  unsubscribedAt    DateTime? @map("unsubscribed_at") @db.Timestamptz(6)
+
+  @@index([isActive])
+  @@map("email_subscribers")
 }

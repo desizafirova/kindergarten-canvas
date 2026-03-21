@@ -16,11 +16,19 @@ import {
 } from '@middlewares/auth/passport_strategies/passportStrategy';
 
 import config from '@config/app';
+import logger from '@utils/logger/winston/logger';
+import { verifySesConnection } from '@services/email/ses_notification_service';
 import routes from '@routes/index';
 import routesUser from '@routes/client/v1';
 import routesAdmin from '@routes/admin/v1';
 import publicNewsRoutes from '@routes/public/news_route';
 import publicTeacherRoutes from '@routes/public/teacher_route';
+import publicEventRoutes from '@routes/public/event_route';
+import publicDeadlineRoutes from '@routes/public/deadline_route';
+import publicJobRoutes from '@routes/public/job_route';
+import publicApplicationRoutes from '@routes/public/application_route';
+import publicGalleryRoutes from '@routes/public/gallery_route';
+import publicSubscriptionRoutes from '@routes/public/subscription_route';
 
 const publicLogs = './logs';
 const publicFavicon = './public/assets/images/favicons/favicon.ico';
@@ -61,11 +69,21 @@ export default () => {
     app.use(baseApiUrl + '/admin/v1/', routesAdmin);
     app.use(baseApiUrl + '/v1/public/news', publicNewsRoutes); // Public routes - NO authentication
     app.use(baseApiUrl + '/v1/public/teachers', publicTeacherRoutes); // Public teachers - NO authentication
+    app.use(baseApiUrl + '/v1/public/events', publicEventRoutes); // Public events - NO authentication
+    app.use(baseApiUrl + '/v1/public/admission-deadlines', publicDeadlineRoutes); // Public deadlines - NO authentication
+    app.use(baseApiUrl + '/v1/public/jobs', publicJobRoutes); // Public jobs - NO authentication
+    app.use(baseApiUrl + '/v1/public/applications', publicApplicationRoutes); // Public applications - NO authentication
+    app.use(baseApiUrl + '/v1/public/galleries', publicGalleryRoutes); // Public galleries - NO authentication
+    app.use(baseApiUrl + '/v1/public', publicSubscriptionRoutes); // Public subscription routes (subscribe + unsubscribe) - NO authentication
 
     app.set('view engine', 'ejs');
     app.set('views', path.join(__dirname, views));
 
     app.use(handleError);
+
+    verifySesConnection().catch((err: any) =>
+        logger.warn('SES startup check skipped', { error: err.message }),
+    );
 
     return app;
 };

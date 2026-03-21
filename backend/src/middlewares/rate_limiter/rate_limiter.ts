@@ -29,4 +29,28 @@ const loginLimiter = rateLimit({
     skipSuccessfulRequests: true, // Don't count successful logins towards the limit
 });
 
-export default { limiter, loginLimiter };
+// Public job application rate limiter: 5 submissions per hour per IP (NFR-S8)
+const applicationLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 5,
+    message: {
+        status: 'fail',
+        data: { message: 'Твърде много заявки. Моля, опитайте отново по-късно.' },
+    },
+    standardHeaders,
+    legacyHeaders,
+});
+
+// Public subscription rate limiter: 5 subscribe attempts per hour per IP
+const subscriptionLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 5,
+    message: {
+        status: 'fail',
+        data: { message: 'Твърде много заявки. Моля, опитайте отново по-късно.' },
+    },
+    standardHeaders,
+    legacyHeaders,
+});
+
+export default { limiter, loginLimiter, applicationLimiter, subscriptionLimiter };

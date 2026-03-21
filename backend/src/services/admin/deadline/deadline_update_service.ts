@@ -3,6 +3,8 @@ import deadlineGetOneDAO from '@dao/deadline/deadline_get_one_dao';
 import deadlineUpdateDAO from '@dao/deadline/deadline_update_dao';
 import { UpdateDeadlineType } from '@schemas/deadline_schema';
 import { DEADLINE_SELECT } from '@constants/deadline_constants';
+import { notifyDeadlinePublished } from '@services/email';
+import logger from '@utils/logger/winston/logger';
 
 const errCode = 'ERROR_DEADLINE_UPDATE';
 const msgError = 'Failed to update deadline';
@@ -22,6 +24,8 @@ export default async (id: number, deadlineData: UpdateDeadlineBody) => {
         return httpMsg.http404(msgNotFound, errCode);
     }
 
+    const isFirstPublish = deadlineData.status === 'PUBLISHED' && !existing.data.publishedAt;
+
     // Handle publishedAt on status transitions
     let publishedAt: Date | null | undefined = undefined;
     if (deadlineData.status === 'PUBLISHED' && !existing.data.publishedAt) {
@@ -37,6 +41,21 @@ export default async (id: number, deadlineData: UpdateDeadlineBody) => {
 
     if (!result.success || !result.data) {
         return httpMsg.http422(msgError, errCode);
+    }
+
+    if (isFirstPublish) {
+        const item = result.data as any;
+        notifyDeadlinePublished({
+            id: item.id,
+            title: item.title,
+            deadlineDate: item.deadlineDate,
+            isUrgent: item.isUrgent,
+            description: item.description,
+        }).catch((err: unknown) =>
+            logger.error('Deadline publish notification error', {
+                error: err instanceof Error ? err.message : String(err),
+            }),
+        );
     }
 
     return httpMsg.http200(result.data);
