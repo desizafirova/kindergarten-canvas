@@ -5,65 +5,44 @@ import logsPath from 'app-root-path';
 const path = logsPath.resolve('/logs/');
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-const custom = winston.format.combine(
+const jsonFormat = winston.format.combine(
+    winston.format.timestamp({ format: 'YYYY-MM-DDTHH:mm:ss.SSSZ' }),
+    winston.format.errors({ stack: true }),
     winston.format.json(),
-    winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-    winston.format.printf(
-        /* istanbul ignore next */ (info) =>
-            `${info.timestamp} | ${info.level.toUpperCase()} | ${info.message}`,
-    ),
-);
-
-const customInfo = winston.format.combine(
-    winston.format.json(),
-    winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-    winston.format.printf(
-        (info) => `${info.timestamp} | ${info.level.toUpperCase()} | ${info.message}`,
-    ),
 );
 
 const logger = winston.createLogger({
     transports: [
         new DailyRotateFile({
             frequency: '24h',
-            // name: 'error',
             level: 'error',
             dirname: `${path}/`,
             filename: 'error-%DATE%.log',
             datePattern: 'YYYY-MM-DD-HH',
             handleExceptions: true,
-            // prepend: true,
             zippedArchive: false,
             maxSize: '5m',
             maxFiles: '7d',
-            format: custom,
+            format: jsonFormat,
         }),
         new DailyRotateFile({
             frequency: '24h',
-            // name: 'info',
             level: 'info',
             dirname: `${path}/`,
             filename: 'info-%DATE%.log',
             datePattern: 'YYYY-MM-DD-HH',
-            // prepend: true,
             zippedArchive: false,
             maxSize: '5m',
             maxFiles: '7d',
-            format: customInfo,
+            format: jsonFormat,
         }),
         new winston.transports.Console({
-            format: winston.format.combine(winston.format.timestamp(), custom),
-            level: isDevelopment ? 'info' : 'error',
+            format: jsonFormat,
+            level: isDevelopment ? 'debug' : 'info',
             handleExceptions: true,
         }),
     ],
     exitOnError: false,
 });
-
-// logger.stream = {
-//     write: function (message) {
-//         logger.info(message);
-//     },
-// };
 
 export default logger;

@@ -7,6 +7,8 @@ import docsRoute from '@routes/commons/docs/docs_route';
 import emailsRoute from '@routes/commons/templates/emails_route';
 import smsRoute from '@routes/commons/templates/sms_route';
 import statsRoute from '@routes/commons/stats/stats_route';
+import metricsRoute from '@routes/commons/metrics/metrics_route';
+import developerRoute from '@routes/commons/developer/developer_route';
 import config from '@config/app';
 
 const router = Router();
@@ -31,6 +33,14 @@ const defaultRoutes = [
     {
         path: '/v1/stats',
         route: statsRoute,
+    },
+    {
+        path: '/v1/metrics',
+        route: metricsRoute,
+    },
+    {
+        path: '/v1/admin/developer',
+        route: developerRoute,
     },
 ];
 

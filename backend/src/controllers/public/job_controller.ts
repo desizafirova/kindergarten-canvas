@@ -28,6 +28,7 @@ export const getPublicJobs = async (req: Request, res: Response) => {
             console.warn(`⚠️ Public jobs list query took ${duration}ms (target: <500ms)`);
         }
 
+        res.set('Cache-Control', 'public, max-age=60');
         return res.status(200).json({
             status: 'success',
             data: { jobs },
@@ -76,6 +77,7 @@ export const getPublicJob = async (req: Request, res: Response) => {
             });
         }
 
+        res.set('Cache-Control', 'public, max-age=300');
         return res.status(200).json({
             status: 'success',
             data: { job },

@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import httpMsg from '@utils/http_messages/http_msg';
 import constError from '@constants/error_constant';
 
-interface AuthenticatedUser {
+export interface AuthenticatedUser {
     id: number;
     email: string;
     role: 'ADMIN' | 'DEVELOPER';

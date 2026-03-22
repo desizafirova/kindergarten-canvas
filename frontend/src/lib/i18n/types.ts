@@ -14,6 +14,7 @@ export interface Translations {
     deadlines: string;
     settings: string;
     logout: string;
+    developer: string;
   };
   buttons: {
     create: string;
@@ -204,12 +205,24 @@ export interface Translations {
     emptyState: string;
     loading: string;
     error: string;
+    notFound: string;
+    backToList: string;
+    importantLabel: string;
+    multiDayLabel: string;
+    locationLabel: string;
   };
   publicDeadlines: {
     sectionTitle: string;
     emptyState: string;
     loading: string;
     error: string;
+    notFound: string;
+    backToList: string;
+    urgentLabel: string;
+    countdownLabel: string;
+    countdownDaysSingular: string;
+    countdownDaysPlural: string;
+    countdownLessThanDay: string;
   };
   publicJobs: {
     sectionTitle: string;

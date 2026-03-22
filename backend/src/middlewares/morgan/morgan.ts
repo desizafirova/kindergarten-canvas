@@ -14,7 +14,7 @@ const skip = () => {
 const consoleLogger = morgan('dev');
 
 const fileLogger = morgan(
-    'HTTP request from :remote-addr :method :url :status :res[content-length] - :response-time ms',
+    ':method :url :status :res[content-length] :response-time ms - :user-agent',
     { stream, skip },
 );
 

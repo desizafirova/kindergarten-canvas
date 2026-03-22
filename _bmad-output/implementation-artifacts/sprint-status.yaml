@@ -123,12 +123,12 @@ development_status:
   epic-8-retrospective: optional
 
   # Epic 9: Public Website API Integration
-  epic-9: backlog
-  9-1-unified-public-content-api: backlog
-  9-2-individual-content-detail-pages: backlog
-  9-3-health-check-and-monitoring-endpoints: backlog
-  9-4-centralized-error-logging: backlog
-  9-5-environment-configuration-and-developer-access: backlog
+  epic-9: in-progress
+  9-1-unified-public-content-api: done
+  9-2-individual-content-detail-pages: done
+  9-3-health-check-and-monitoring-endpoints: done
+  9-4-centralized-error-logging: done
+  9-5-environment-configuration-and-developer-access: done
   epic-9-retrospective: optional
 
 # FUTURE ENHANCEMENTS (to be scheduled)

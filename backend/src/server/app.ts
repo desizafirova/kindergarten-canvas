@@ -9,6 +9,7 @@ import bodyParser from 'body-parser';
 import xss from '@middlewares/xss/xss';
 import morgan from '@middlewares/morgan/morgan';
 import rateLimit from '@middlewares/rate_limiter/rate_limiter';
+import { metricsMiddleware } from '@middlewares/metrics/metrics_middleware';
 import handleError from '@middlewares/http_error_handler/error_handler';
 import {
     localUserStrategy,
@@ -29,6 +30,7 @@ import publicJobRoutes from '@routes/public/job_route';
 import publicApplicationRoutes from '@routes/public/application_route';
 import publicGalleryRoutes from '@routes/public/gallery_route';
 import publicSubscriptionRoutes from '@routes/public/subscription_route';
+import publicHomepageRoutes from '@routes/public/homepage_route';
 
 const publicLogs = './logs';
 const publicFavicon = './public/assets/images/favicons/favicon.ico';
@@ -56,6 +58,7 @@ export default () => {
 
     app.use(xss());
     app.use(rateLimit.limiter);
+    app.use(metricsMiddleware);
 
     localUserStrategy(passport);
     jwtUserStrategy(passport);
@@ -75,6 +78,7 @@ export default () => {
     app.use(baseApiUrl + '/v1/public/applications', publicApplicationRoutes); // Public applications - NO authentication
     app.use(baseApiUrl + '/v1/public/galleries', publicGalleryRoutes); // Public galleries - NO authentication
     app.use(baseApiUrl + '/v1/public', publicSubscriptionRoutes); // Public subscription routes (subscribe + unsubscribe) - NO authentication
+    app.use(baseApiUrl + '/v1/public/homepage', publicHomepageRoutes); // Public homepage - NO authentication
 
     app.set('view engine', 'ejs');
     app.set('views', path.join(__dirname, views));

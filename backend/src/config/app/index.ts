@@ -17,12 +17,41 @@ const validateEnvVariables = (env: IProcessEnv, isProd: boolean): void => {
         errors.push('JWT_SECRET_ADMIN must be set and at least 32 characters');
     }
 
+    // Always required (needed in development too)
+    if (!env.DATABASE_URL) {
+        errors.push('DATABASE_URL is required');
+    }
+    if (!env.CLOUDINARY_CLOUD_NAME) {
+        errors.push('CLOUDINARY_CLOUD_NAME is required');
+    }
+    if (!env.CLOUDINARY_API_KEY) {
+        errors.push('CLOUDINARY_API_KEY is required');
+    }
+    if (!env.CLOUDINARY_API_SECRET) {
+        errors.push('CLOUDINARY_API_SECRET is required');
+    }
+    if (!env.AWS_SES_REGION) {
+        errors.push('AWS_SES_REGION is required');
+    }
+    if (!env.AWS_SES_ACCESS_KEY_ID) {
+        errors.push('AWS_SES_ACCESS_KEY_ID is required');
+    }
+    if (!env.AWS_SES_SECRET_ACCESS_KEY) {
+        errors.push('AWS_SES_SECRET_ACCESS_KEY is required');
+    }
+    if (!env.AWS_SES_FROM_EMAIL) {
+        errors.push('AWS_SES_FROM_EMAIL is required');
+    }
+    if (!env.JWT_REFRESH_EXPIRATION) {
+        errors.push('JWT_REFRESH_EXPIRATION is required');
+    }
+
     if (isProd) {
-        if (!env.DATABASE_URL) {
-            errors.push('DATABASE_URL is required in production');
-        }
         if (!env.CORS_ALLOW_ORIGIN || env.CORS_ALLOW_ORIGIN === '*') {
             errors.push('CORS_ALLOW_ORIGIN must be set to a specific origin in production (not *)');
+        }
+        if (!env.FRONTEND_URL) {
+            errors.push('FRONTEND_URL is required in production');
         }
     }
 

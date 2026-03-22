@@ -8,6 +8,16 @@ import config from '@config/app';
 import logger from '@utils/logger/winston/logger';
 import { initializePreviewSocket } from '@socket/preview.socket';
 
+process.on('unhandledRejection', (reason: unknown, promise: Promise<unknown>) => {
+    const error = reason instanceof Error ? reason : new Error(String(reason));
+    logger.error('Unhandled Promise Rejection', {
+        error: error.message,
+        stack: error.stack,
+        promise: String(promise),
+    });
+    // Do NOT exit — let the process continue; Render will restart if truly fatal
+});
+
 export default async (silent: boolean) => {
     const serverHost = config.app.host;
     const serverPort = config.app.port;
@@ -138,22 +148,22 @@ const shutDown = (server: any, connections: any) => {
     /* eslint-disable no-console */
     console.log('Http server error - Received kill signal, shutting down gracefully (SHUTDOWN)');
     /* eslint-enable no-console */
-    logger.error('Http server error - Received kill signal, shutting down gracefully (SHUTDOWN)');
+    logger.warn('Http server - Received kill signal, shutting down gracefully (SHUTDOWN)');
     server.close(() => {
         /* eslint-disable no-console */
-        console.log('Http server error - Closed out remaining connections (SHUTDOWN)');
+        console.log('Http server - Closed out remaining connections (SHUTDOWN)');
         /* eslint-enable no-console */
-        logger.error('Http server error - Closed out remaining connections (SHUTDOWN)');
+        logger.info('Http server - Closed out remaining connections (SHUTDOWN)');
         process.exit(0);
     });
     setTimeout(() => {
         /* eslint-disable no-console */
         console.log(
-            'Http server error - Could not close connections in time, forcefully shutting down (SHUTDOWN)',
+            'Http server - Could not close connections in time, forcefully shutting down (SHUTDOWN)',
         );
         /* eslint-enable no-console */
-        logger.error(
-            'Http server error - Could not close connections in time, forcefully shutting down (SHUTDOWN)',
+        logger.warn(
+            'Http server - Could not close connections in time, forcefully shutting down (SHUTDOWN)',
         );
         process.exit(1);
     }, 10000);

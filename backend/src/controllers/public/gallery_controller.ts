@@ -33,6 +33,7 @@ export const getPublicGalleries = async (req: Request, res: Response) => {
             imageCount: _count.images,
         }));
 
+        res.set('Cache-Control', 'public, max-age=60');
         return res.status(200).json({
             status: 'success',
             data: { galleries },
@@ -87,6 +88,7 @@ export const getPublicGallery = async (req: Request, res: Response) => {
             });
         }
 
+        res.set('Cache-Control', 'public, max-age=300');
         return res.status(200).json({
             status: 'success',
             data: { gallery },

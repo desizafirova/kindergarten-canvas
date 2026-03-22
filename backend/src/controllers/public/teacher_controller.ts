@@ -34,6 +34,7 @@ export const getPublishedTeachers = async (req: Request, res: Response) => {
             console.warn(`⚠️ Public teachers list query took ${duration}ms (target: <500ms)`);
         }
 
+        res.set('Cache-Control', 'public, max-age=60');
         return res.status(200).json({
             status: 'success',
             data: {

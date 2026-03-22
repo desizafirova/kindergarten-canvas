@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -7,9 +8,11 @@ import {
   Clock,
   Image,
   Users,
+  Code2,
 } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
+import { AuthContext } from '@/contexts/AuthContext';
 import {
   Tooltip,
   TooltipContent,
@@ -40,6 +43,8 @@ interface SidebarNavProps {
 export const SidebarNav = ({ collapsed = false, onNavigate }: SidebarNavProps) => {
   const location = useLocation();
   const t = useTranslation();
+  const { user } = useContext(AuthContext);
+  const isDeveloper = user?.role === 'DEVELOPER';
 
   const NavLink = ({ item }: { item: NavItem }) => {
     const Icon = item.icon;
@@ -66,6 +71,8 @@ export const SidebarNav = ({ collapsed = false, onNavigate }: SidebarNavProps) =
     );
   };
 
+  const developerItem: NavItem = { path: '/admin/developer', icon: Code2, labelKey: 'developer' };
+
   return (
     <nav className="flex-1 space-y-1 px-2" aria-label="Main navigation">
       {navigationItems.map((item) => {
@@ -88,6 +95,25 @@ export const SidebarNav = ({ collapsed = false, onNavigate }: SidebarNavProps) =
 
         return <NavLink key={item.path} item={item} />;
       })}
+      {isDeveloper && (
+        <>
+          <div className="my-1 border-t border-border" />
+          {collapsed ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div>
+                  <NavLink item={developerItem} />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <p>{t.nav.developer}</p>
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <NavLink item={developerItem} />
+          )}
+        </>
+      )}
     </nav>
   );
 };

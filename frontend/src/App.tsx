@@ -30,6 +30,8 @@ import { JobsPage } from "./pages/public/JobsPage";
 import { JobDetailPage } from "./pages/public/JobDetailPage";
 import { GalleriesPage } from "./pages/public/GalleriesPage";
 import { GalleryDetailPage } from "./pages/public/GalleryDetailPage";
+import { EventDetailPage } from "./pages/public/EventDetailPage";
+import { DeadlineDetailPage } from "./pages/public/DeadlineDetailPage";
 import TeachersList from "./pages/admin/TeachersList";
 import TeacherCreate from "./pages/admin/TeacherCreate";
 import TeacherEdit from "./pages/admin/TeacherEdit";
@@ -45,6 +47,7 @@ import JobEdit from "./pages/admin/JobEdit";
 import GalleriesList from "./pages/admin/GalleriesList";
 import GalleryCreate from "./pages/admin/GalleryCreate";
 import GalleryEdit from "./pages/admin/GalleryEdit";
+import DeveloperPage from "./pages/admin/DeveloperPage";
 
 const queryClient = new QueryClient();
 
@@ -66,7 +69,9 @@ const App = () => (
             <Route path="/news/:id" element={<ErrorBoundary><PublicLayout><NewsDetailPage /></PublicLayout></ErrorBoundary>} />
             <Route path="/teachers" element={<ErrorBoundary><PublicLayout><TeachersPage /></PublicLayout></ErrorBoundary>} />
             <Route path="/events" element={<ErrorBoundary><PublicLayout><EventsPage /></PublicLayout></ErrorBoundary>} />
+            <Route path="/events/:id" element={<ErrorBoundary><PublicLayout><EventDetailPage /></PublicLayout></ErrorBoundary>} />
             <Route path="/deadlines" element={<ErrorBoundary><PublicLayout><DeadlinesPage /></PublicLayout></ErrorBoundary>} />
+            <Route path="/deadlines/:id" element={<ErrorBoundary><PublicLayout><DeadlineDetailPage /></PublicLayout></ErrorBoundary>} />
             <Route path="/jobs" element={<ErrorBoundary><PublicLayout><JobsPage /></PublicLayout></ErrorBoundary>} />
             <Route path="/jobs/:id" element={<ErrorBoundary><PublicLayout><JobDetailPage /></PublicLayout></ErrorBoundary>} />
             <Route path="/galleries" element={<ErrorBoundary><PublicLayout><GalleriesPage /></PublicLayout></ErrorBoundary>} />
@@ -291,6 +296,18 @@ const App = () => (
                   <AdminLayout>
                     <ErrorBoundary>
                       <GalleryEdit />
+                    </ErrorBoundary>
+                  </AdminLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/developer"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout>
+                    <ErrorBoundary>
+                      <DeveloperPage />
                     </ErrorBoundary>
                   </AdminLayout>
                 </ProtectedRoute>
